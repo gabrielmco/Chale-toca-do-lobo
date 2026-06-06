@@ -360,8 +360,8 @@
   z-index: 3; // Stack above the moon wrapper (z-index: 2) and background (z-index: 1)
 
   // Máscara estática pré-processada para performance ideal (sem Canvas JS)
-  -webkit-mask-image: url('../../imgs-videos/maned-wolf-climbing-mask.webp');
-  mask-image: url('../../imgs-videos/maned-wolf-climbing-mask.webp');
+  -webkit-mask-image: url('/imgs-videos/maned-wolf-climbing-mask.webp');
+  mask-image: url('/imgs-videos/maned-wolf-climbing-mask.webp');
 
   // Mask properties - auto 100% preserves 1:1 wolf aspect ratio scaling dynamically to card height
   -webkit-mask-size: auto 100%;
