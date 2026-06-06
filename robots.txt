@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /*?*
+Disallow: /admin
+Disallow: /api
+
+Sitemap: https://chaletocadolobo.com.br/sitemap.xml

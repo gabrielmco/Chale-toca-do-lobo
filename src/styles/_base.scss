@@ -1,0 +1,188 @@
+// ==========================================================================
+// _base.scss — RESET GLOBAL, BODY, LINKS, UTILITÁRIOS
+// ==========================================================================
+@use 'tokens' as *;
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: text;
+}
+
+html,
+body {
+  background: linear-gradient(140deg, rgba($moss-black, 0.98), rgba($neutral-dark, 0.92)), $moss-black;
+  color: $warm-linen;
+  font-family: $font-body;
+  font-size: 16px;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+// Buttons
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  background-color: $amber-sunset;
+  color: $moss-black;
+  padding: 0.8rem 1.8rem;
+  border-radius: 0;
+  font-family: $font-headings;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid $amber-sunset;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.6s $ease-buttery, border-color 0.6s $ease-buttery, transform 0.6s $ease-buttery;
+
+  span, svg {
+    position: relative;
+    z-index: 2;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.6s $ease-buttery;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: $moss-black;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.6s $ease-buttery;
+    z-index: 1;
+  }
+
+  &:hover {
+    color: $amber-sunset;
+    border-color: $amber-sunset;
+    transform: translateY(-4px);
+
+    &::before {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    svg { transform: translateX(4px); }
+  }
+
+  &:active { transform: translateY(-1px); }
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  background-color: transparent;
+  color: $warm-linen;
+  padding: 0.8rem 2.2rem;
+  border-radius: 50px;
+  font-family: $font-headings;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid rgba($warm-linen, 0.2);
+  position: relative;
+  overflow: hidden;
+  transition: color 1.8s $ease-smooth, border-color 1.8s $ease-smooth, transform 1.8s $ease-smooth;
+
+  span, svg {
+    position: relative;
+    z-index: 2;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: $warm-linen;
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 1.8s $ease-smooth;
+    z-index: 1;
+  }
+
+  &:hover {
+    color: $moss-black;
+    border-color: $warm-linen;
+    transform: translateY(-4px);
+
+    &::before {
+      transform: scaleY(1);
+      transform-origin: top;
+    }
+  }
+
+  &:active { transform: translateY(-1px); }
+}
+
+.btn-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: rgba($warm-linen, 0.8);
+  font-family: $font-headings;
+  font-weight: 500;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.8rem 0;
+  position: relative;
+  transition: color 0.6s $ease-buttery;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.6s $ease-buttery;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: $amber-sunset;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.6s $ease-buttery;
+  }
+
+  &:hover {
+    color: $warm-linen;
+    svg { transform: translateX(4px); }
+    &::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
+}

@@ -1,0 +1,215 @@
+// ==========================================================================
+// _map.scss - Mapa editorial de localizacao
+// ==========================================================================
+@use 'tokens' as *;
+
+.location-map-section {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  padding: clamp(5.25rem, 8vh, 6.6rem) clamp(1rem, 2vw, 2rem) clamp(1rem, 2vw, 2rem);
+  background: $warm-linen;
+  color: $moss-black;
+  isolation: isolate;
+}
+
+.location-map-topline {
+  position: absolute;
+  left: clamp(1.2rem, 3vw, 3rem);
+  right: clamp(1.2rem, 3vw, 3rem);
+  top: clamp(1.6rem, 3.5vh, 2.8rem);
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  pointer-events: none;
+
+  span {
+    font-family: $font-headings;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba($moss-black, 0.74);
+  }
+}
+
+.location-map-frame {
+  position: relative;
+  width: 100%;
+  min-height: calc(100dvh - clamp(6.25rem, 10vh, 8rem));
+  display: block;
+  padding: 0;
+  border: 1px solid $moss-black;
+  background: $moss-black;
+  color: inherit;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.location-map-frame iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  filter: grayscale(1) contrast(1.12) brightness(1.0);
+  transform: scale(1.006);
+  transform-origin: center;
+  pointer-events: none;
+  transition: opacity 0.3s $ease-buttery;
+}
+
+.location-map-frame.is-active iframe {
+  pointer-events: auto;
+}
+
+.location-map-tint {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(rgba($moss-black, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba($moss-black, 0.03) 1px, transparent 1px),
+    $warm-linen;
+  background-size: 30px 30px, 30px 30px, auto;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  opacity: 0.92;
+  transition: opacity 0.4s $ease-buttery;
+
+  .location-map-frame.is-active & {
+    opacity: 0.22; // Let the actual map show through clearly when interacting
+  }
+}
+
+.location-map-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 1px solid rgba($warm-linen, 0.25);
+  box-shadow: inset 0 1px 4px rgba($moss-black, 0.15);
+  pointer-events: none;
+}
+
+.map-open-label {
+  position: absolute;
+  font-family: $font-headings;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba($warm-linen, 0.62);
+}
+
+.map-open-label {
+  z-index: 4;
+  right: 2rem;
+  top: 2rem;
+  padding: 0.8rem 1.2rem;
+  border: 1px solid rgba($warm-linen, 0.2);
+  background: rgba($moss-black, 0.92);
+  backdrop-filter: blur(8px);
+  color: $warm-linen;
+  text-decoration: none;
+  box-shadow: 
+    0 12px 24px rgba($neutral-dark, 0.15),
+    inset 0 1px 0 rgba($warm-linen, 0.15);
+  transition: background 0.4s $ease-buttery, color 0.4s $ease-buttery, transform 0.4s $ease-buttery, border-color 0.4s $ease-buttery, box-shadow 0.4s $ease-buttery;
+
+  &:hover,
+  &:focus-visible {
+    transform: translate3d(0, -2px, 0);
+    background: $warm-linen;
+    color: $moss-black;
+    border-color: $warm-linen;
+    box-shadow: 0 18px 36px rgba($neutral-dark, 0.25);
+    outline: none;
+  }
+}
+
+.map-label {
+  position: absolute;
+  left: clamp(2rem, 5vw, 5rem);
+  bottom: clamp(2rem, 5vw, 5rem);
+  z-index: 4;
+  min-width: min(360px, 72vw);
+  padding: 1.2rem 1.5rem;
+  border: 1px solid rgba($warm-linen, 0.15);
+  background: rgba($moss-black, 0.92);
+  backdrop-filter: blur(8px);
+  box-shadow: 
+    0 20px 40px rgba($neutral-dark, 0.25),
+    inset 0 1px 0 rgba($warm-linen, 0.1);
+  transition: transform 0.4s $ease-buttery, border-color 0.4s $ease-buttery;
+
+  &:hover {
+    transform: translate3d(0, -4px, 0);
+    border-color: rgba($warm-linen, 0.35);
+  }
+
+  strong,
+  small {
+    display: block;
+    font-family: $font-headings;
+    text-transform: uppercase;
+  }
+
+  strong {
+    font-size: 0.92rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: $warm-linen;
+  }
+
+  small {
+    margin-top: 0.35rem;
+    color: rgba($warm-linen, 0.66);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (max-width: 768px) {
+  .location-map-topline {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    margin-bottom: 1.5rem;
+  }
+
+  .location-map-section {
+    min-height: auto;
+    padding: 3.5rem 1.2rem 1.2rem;
+  }
+
+  .location-map-frame {
+    min-height: 74dvh;
+  }
+
+  .location-map-frame iframe,
+  .location-map-tint,
+  .location-map-frame::after {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .map-label {
+    left: 1rem;
+    right: 1rem;
+    top: auto;
+    bottom: 1rem;
+    min-width: 0;
+  }
+
+  .map-open-label {
+    right: 1rem;
+    top: 1rem;
+  }
+}

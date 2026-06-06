@@ -1,0 +1,80 @@
+// ==========================================================================
+// _marquee.scss - Texto infinito reativo ao scroll
+// ==========================================================================
+@use 'tokens' as *;
+
+.marquee-experiencias-stage {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: $neutral-dark;
+  isolation: isolate;
+}
+
+.scroll-marquee-section {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  min-height: 100dvh;
+  overflow: hidden;
+  background-color: $neutral-dark;
+  color: $warm-gray;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.scroll-marquee-lane {
+  width: 100%;
+  will-change: transform, opacity;
+}
+
+.scroll-marquee-track {
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+  will-change: transform;
+
+  span {
+    display: inline-block;
+    padding-right: 0.34em;
+    font-family: "Host Grotesk", sans-serif;
+    font-size: clamp(5.4rem, 12vw, 230px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: clamp(5rem, 10.5vw, 200px);
+    letter-spacing: 0;
+    color: $warm-gray;
+  }
+}
+
+@media (max-width: 1024px) {
+  .marquee-experiencias-stage {
+    min-height: auto;
+    height: auto;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .scroll-marquee-section {
+    position: relative;
+    inset: auto;
+    min-height: auto;
+    height: clamp(140px, 20dvh, 180px);
+    padding: 0;
+    overflow: hidden;
+    background-color: $neutral-dark;
+  }
+
+  .scroll-marquee-track span {
+    font-size: clamp(3.5rem, 9vw, 5.2rem);
+    line-height: clamp(3.2rem, 8.5vw, 4.8rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .scroll-marquee-section {
+    padding: 0;
+  }
+}

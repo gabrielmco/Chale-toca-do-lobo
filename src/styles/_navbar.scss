@@ -1,0 +1,281 @@
+// ==========================================================================
+// _navbar.scss — FLOATING NAVBAR + MOBILE MENU
+// ==========================================================================
+@use 'tokens' as *;
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.8rem 0;
+  z-index: $z-navbar;
+  transition: padding 0.4s $ease-buttery, background-color 0.4s ease, border-bottom 0.4s ease;
+  border-bottom: 1px solid rgba($warm-linen, 0.05);
+  will-change: transform;
+
+  &.nav-hidden {
+    transform: translateY(-100%);
+  }
+
+  &.menu-open {
+    z-index: 1000;
+  }
+
+  &.scrolled {
+    padding: 1rem 0;
+    background-color: rgba($neutral-dark, 0.85);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba($warm-linen, 0.05);
+  }
+
+  .navbar-container {
+    --nav-logo-left: 50%;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0 4rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    justify-items: stretch;
+
+    @media (max-width: 1024px) {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 1.2rem;
+    }
+  }
+
+  .navbar-logo {
+    position: absolute;
+    top: 50%;
+    left: var(--nav-logo-left);
+    transform: translate(-50%, -50%);
+    font-family: $font-headings;
+    font-weight: 700;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $warm-linen;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    @media (max-width: 1024px) {
+      position: relative;
+      top: auto;
+      left: auto;
+      transform: none;
+    }
+
+    .wolf-logo-svg {
+      width: 82px;
+      height: 82px;
+      color: $warm-linen;
+      transition: transform 1.2s $ease-buttery, color 1.2s $ease-buttery;
+
+      @media (max-width: 1024px) {
+        width: 58px;
+        height: 58px;
+      }
+
+      @media (max-width: 420px) {
+        width: 52px;
+        height: 52px;
+      }
+    }
+
+    .moon-logo-svg {
+      position: absolute;
+      top: 4px;
+      right: -24px;
+      width: 28px;
+      height: 28px;
+      color: $amber-sunset;
+      opacity: 0;
+      transform: translateY(-130px) scale(0.5);
+      transition: transform 1.2s $ease-buttery, opacity 1.2s ease, filter 1.2s ease;
+      pointer-events: none;
+      filter: drop-shadow(0 0 0px rgba($warm-linen, 0));
+    }
+
+    &:hover {
+      .wolf-logo-svg {
+        transform: rotate(-8deg) scale(1.03);
+      }
+      .moon-logo-svg {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: drop-shadow(0 0 12px rgba($warm-linen, 0.95));
+      }
+    }
+  }
+
+  .navbar-menu {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    justify-self: start;
+
+    @media (max-width: 1024px) { display: none; }
+
+    .menu-item {
+      font-family: $font-headings;
+      font-weight: 500;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba($warm-linen, 0.65);
+      position: relative;
+      padding: 0.5rem 0;
+      transition: color 0.8s $ease-buttery;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: $amber-sunset;
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.5s $ease-buttery;
+      }
+
+      &:hover {
+        color: $warm-linen;
+        &::after {
+          transform: scaleX(1);
+          transform-origin: left;
+        }
+      }
+
+      // When hover ends, the origin stays left so exit goes right
+      &:not(:hover)::after {
+        transform-origin: right;
+      }
+
+      &.active {
+        color: $amber-sunset;
+        &::after {
+          transform: scaleX(1);
+          transform-origin: left;
+          background-color: $amber-sunset;
+        }
+      }
+    }
+  }
+
+  .navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    justify-self: end;
+
+    @media (max-width: 850px) {
+      margin-left: 0;
+    }
+
+    @media (max-width: 1024px) {
+      gap: 0;
+
+      .btn-primary {
+        display: none;
+      }
+    }
+  }
+}
+
+// Hamburger
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  @media (max-width: 1024px) { display: flex; }
+
+  .bar {
+    width: 100%;
+    height: 2px;
+    background-color: $warm-linen;
+    transition: transform 0.4s $ease-buttery, opacity 0.3s ease;
+    transform-origin: 50% 50%;
+  }
+
+  &.active {
+    .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .bar:nth-child(2) { transform: translateY(-6px) rotate(-45deg); }
+  }
+}
+
+// Mobile Menu Overlay
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(140deg, rgba($moss-black, 0.98), rgba($neutral-dark, 0.92)), $moss-black;
+  z-index: $z-mobile-menu;
+  opacity: 0;
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+  padding: 7rem 4rem 3rem;
+  pointer-events: none;
+
+  &.active {
+    pointer-events: auto;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 7rem 1.2rem 2rem;
+  }
+
+  .mobile-menu-inner {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .mobile-menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .mobile-menu-item {
+    font-family: $font-headings;
+    font-size: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba($warm-linen, 0.4);
+    transition: color 0.3s ease, transform 0.4s $ease-buttery;
+    display: block;
+    transform: translateY(30px);
+    opacity: 0;
+
+    &:hover {
+      color: $amber-sunset;
+      transform: translateX(10px);
+    }
+  }
+
+  .mobile-menu-footer {
+    transform: translateY(30px);
+    opacity: 0;
+
+    p {
+      font-size: 0.9rem;
+      color: $gray-muted;
+      margin-bottom: 1.5rem;
+    }
+  }
+}

@@ -1,0 +1,35 @@
+// ==========================================================================
+// main.scss — ORQUESTRADOR CENTRAL
+// Importa todos os módulos em ordem de dependência.
+// NÃO escreva CSS aqui — só @use.
+// ==========================================================================
+
+// 1. Tokens de design (variáveis, easings, z-indexes)
+@use 'tokens';
+
+// 2. Reset global, body, links e botões compartilhados
+@use 'base';
+
+// 3. Loader de entrada
+@use 'loader';
+
+// 4. Navbar flutuante + mobile menu
+@use 'navbar';
+
+// 5. Hero section (parallax + reveal)
+@use 'hero';
+
+// 6. Seção do Chalé (texto animado + galeria slider)
+@use 'chale';
+
+// ─── Adicione novas seções abaixo conforme o projeto cresce ──────────────────
+@use 'videos';
+@use 'marquee';
+@use 'experiencias';
+@use 'feedback';
+@use 'reservation';
+@use 'map';
+// @use 'videos';
+// @use 'depoimentos';
+// @use 'localizacao';
+// @use 'footer';

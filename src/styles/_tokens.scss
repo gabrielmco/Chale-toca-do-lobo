@@ -1,0 +1,33 @@
+// ==========================================================================
+// _tokens.scss — DESIGN TOKENS (variáveis, easing, z-indexes)
+// Importado primeiro por main.scss. Nunca gera CSS sozinho.
+// ==========================================================================
+
+// Paleta de Cores (Butter & Green Premium System)
+$moss-black:    #013e37; // Verde profundo da serra
+$neutral-dark:  #001c18; // Gradiente ultra escuro verde
+$warm-linen:    #ffefb3; // Butter cream macio
+$amber-sunset:  #ffefb3; // Destaques em butter cream
+$white:         #ffffff; // Branco para loader
+$gray-light:    rgba(255, 239, 179, 0.25);
+$gray-muted:    rgba(255, 239, 179, 0.65);
+$sand-beige:    #ebd7c0; // Tom de areia para kickers e textos secundários em cards escuros
+$warm-gray:     #b1a696; // Tom de cinza quente para o letreiro infinito
+
+
+// Tipografia (Unificada globalmente, exceto Loader)
+$font-headings: 'Host Grotesk', sans-serif;
+$font-serif:    'Host Grotesk', sans-serif;
+$font-body:     'Host Grotesk', sans-serif;
+
+// Z-Indexes (hierarquia global)
+$z-cursor:      9999;
+$z-loader:       999;
+$z-mobile-menu:  980;
+$z-navbar:       900;
+$z-content:       10;
+$z-background:     1;
+
+// Easing Premium
+$ease-buttery: cubic-bezier(0.16, 1, 0.3, 1);
+$ease-smooth:  cubic-bezier(0.25, 1, 0.5, 1);
