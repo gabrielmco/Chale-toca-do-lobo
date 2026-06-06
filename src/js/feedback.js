@@ -24,20 +24,17 @@ export function initFeedbackReveal() {
   const kickerSplit = kicker ? SplitText.create(kicker, {
     type: 'words',
     mask: 'words',
-    wordsClass: 'feedback-kicker-word',
-    aria: 'auto'
+    wordsClass: 'feedback-kicker-word'
   }) : null;
   const titleSplit = title ? SplitText.create(title, {
     type: 'words',
     mask: 'words',
-    wordsClass: 'feedback-title-word',
-    aria: 'auto'
+    wordsClass: 'feedback-title-word'
   }) : null;
   const subSplit = sub ? SplitText.create(sub, {
     type: 'words',
     mask: 'words',
-    wordsClass: 'feedback-sub-word',
-    aria: 'auto'
+    wordsClass: 'feedback-sub-word'
   }) : null;
   const kickerWords = kickerSplit ? kickerSplit.words : kicker ? [kicker] : [];
   const titleWords = titleSplit ? titleSplit.words : title ? [title] : [];

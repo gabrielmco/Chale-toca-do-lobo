@@ -920,8 +920,8 @@ export function initExperiencias() {
 
         if (drawerTitleSplit) drawerTitleSplit.revert();
         if (drawerSubtitleSplit) drawerSubtitleSplit.revert();
-        drawerTitleSplit = SplitText.create(titleEl, { type: "lines", mask: "lines", aria: "auto" });
-        drawerSubtitleSplit = SplitText.create(subtitleEl, { type: "lines", mask: "lines", aria: "auto" });
+        drawerTitleSplit = SplitText.create(titleEl, { type: "lines", mask: "lines" });
+        drawerSubtitleSplit = SplitText.create(subtitleEl, { type: "lines", mask: "lines" });
 
         const newTitleLines = drawerTitleSplit ? drawerTitleSplit.lines : [titleEl];
         const newSubtitleLines = drawerSubtitleSplit ? drawerSubtitleSplit.lines : [subtitleEl];
@@ -1289,8 +1289,8 @@ function initExperienciasReveal(accordion, prefersReducedMotion) {
   const supra = section.querySelector(".experiencias-supra");
   const title = section.querySelector(".experiencias-title");
   const sub = section.querySelector(".experiencias-sub");
-  const titleSplit = title ? SplitText.create(title, { type: "lines", mask: "lines", aria: "auto" }) : null;
-  const subSplit = sub ? SplitText.create(sub, { type: "lines", mask: "lines", aria: "auto" }) : null;
+  const titleSplit = title ? SplitText.create(title, { type: "lines", mask: "lines" }) : null;
+  const subSplit = sub ? SplitText.create(sub, { type: "lines", mask: "lines" }) : null;
   const introItems = [
     supra,
     ...(titleSplit ? titleSplit.lines : title ? [title] : []),
