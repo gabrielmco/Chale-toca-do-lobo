@@ -4,9 +4,6 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import flatpickr from 'flatpickr';
-import { Portuguese } from 'flatpickr/dist/l10n/pt.js';
-import 'flatpickr/dist/flatpickr.min.css';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -17,14 +14,13 @@ const COLORS = {
 };
 
 const WHATSAPP_NUMBER = '5532988667074';
-const DEFAULT_MESSAGE = 'Olá! Quero consultar disponibilidade do Chalé Toca do Lobo.';
+const DEFAULT_MESSAGE = 'Olá! Quero consultar disponibilidade da Casa Toca do Lobo.';
 
 export function initReservationReveal() {
   const section = document.getElementById('reservar');
   if (!section) return;
 
   initReservationWhatsApp(section);
-  initReservationDatepickers();
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isResponsiveLayout = window.matchMedia('(max-width: 1024px)').matches;
@@ -331,13 +327,10 @@ function initReservationWhatsApp(section) {
     const data = new FormData(form);
     const get = (field) => String(data.get(field) || '').trim();
     const messageLines = [
-      'Olá! Quero consultar disponibilidade do Chalé Toca do Lobo.',
+      'Olá! Quero consultar disponibilidade da Casa Toca do Lobo.',
       '',
       `Nome: ${get('nome')}`,
-      `E-mail: ${get('email')}`,
       `Telefone/WhatsApp: ${get('telefone')}`,
-      `Check-in: ${formatDate(get('checkin'))}`,
-      `Check-out: ${formatDate(get('checkout'))}`,
       `Hóspedes: ${get('hospedes')}`,
       get('mensagem') ? `Mensagem: ${get('mensagem')}` : ''
     ].filter(Boolean);
@@ -346,64 +339,6 @@ function initReservationWhatsApp(section) {
   });
 }
 
-function initReservationDatepickers() {
-  const checkinInput = document.getElementById('checkin');
-  const checkoutInput = document.getElementById('checkout');
-  if (!checkinInput || !checkoutInput) return;
-
-  const commonConfig = {
-    locale: Portuguese,
-    dateFormat: 'Y-m-d',
-    altInput: true,
-    altFormat: 'd/m/Y',
-    minDate: 'today',
-    disableMobile: true,
-    shorthandCurrentMonth: true,
-    nextArrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>',
-    prevArrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>'
-  };
-
-  const checkinPicker = flatpickr(checkinInput, {
-    ...commonConfig,
-    onChange: function(selectedDates) {
-      if (selectedDates.length > 0) {
-        const minCheckoutDate = new Date(selectedDates[0]);
-        minCheckoutDate.setDate(minCheckoutDate.getDate() + 1);
-        checkoutPicker.set('minDate', minCheckoutDate);
-        
-        const currentCheckoutDate = checkoutPicker.selectedDates[0];
-        if (currentCheckoutDate && currentCheckoutDate <= selectedDates[0]) {
-          checkoutPicker.clear();
-        }
-        
-        setTimeout(() => {
-          checkoutPicker.open();
-        }, 50);
-      }
-    }
-  });
-
-  const checkoutPicker = flatpickr(checkoutInput, {
-    ...commonConfig,
-    onChange: function(selectedDates) {
-      if (selectedDates.length > 0) {
-        const maxCheckinDate = new Date(selectedDates[0]);
-        maxCheckinDate.setDate(maxCheckinDate.getDate() - 1);
-        checkinPicker.set('maxDate', maxCheckinDate);
-      }
-    }
-  });
-}
-
 function buildWhatsAppUrl(message) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-}
-
-function formatDate(value) {
-  if (!value) return '';
-
-  const [year, month, day] = value.split('-');
-  if (!year || !month || !day) return value;
-
-  return `${day}/${month}/${year}`;
 }

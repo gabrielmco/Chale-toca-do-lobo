@@ -171,6 +171,29 @@
   user-select: none;
 }
 
+.feedback-avatar-initial {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  border-radius: 50%;
+  border: 1px solid rgba($warm-linen, 0.42);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: $neutral-dark;
+  font-family: $font-headings;
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
+
+  &.color-1 { background: #dca34b; }
+  &.color-2 { background: #556b2f; color: $warm-linen; }
+  &.color-3 { background: #c5a880; }
+  &.color-4 { background: #8fbc8f; }
+}
+
 .feedback-rating {
   width: fit-content;
   padding: 0.45rem 0.7rem;
@@ -313,6 +336,13 @@
     width: 50px;
     height: 50px;
     flex-basis: 50px;
+  }
+
+  .feedback-avatar-initial {
+    width: 50px;
+    height: 50px;
+    flex-basis: 50px;
+    font-size: 1.15rem;
   }
 
   .feedback-card p {

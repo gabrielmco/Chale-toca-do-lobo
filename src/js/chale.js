@@ -13,25 +13,35 @@ let resizeRefreshHandler = null;
 let resizeRefreshTimer = null;
 
 const GALLERY_ITEMS = [
-  { src: "/imgs-videos/melhoradas/externas/wide/Espaço_Externo_--_Wide_--_202606021251.webp", label: "Fachada do Chalé Toca do Lobo em Ibitipoca à noite" },
-  { src: "/imgs-videos/melhoradas/externas/wide/Espaço_Externo_--_Wide_--_202606021251_2.webp", label: "Varanda aconchegante da Pousada e Chalé no primeiro andar" },
+  { src: "/imgs-videos/melhoradas/externas/wide/Espaço_Externo_--_Wide_--_202606021251.webp", label: "Fachada da Casa Toca do Lobo em Ibitipoca à noite" },
+  { src: "/imgs-videos/melhoradas/externas/wide/Espaço_Externo_--_Wide_--_202606021251_2.webp", label: "Varanda aconchegante da Casa no primeiro andar" },
   { src: "/imgs-videos/melhoradas/externas/wide/Espaço_Externo_--_Wide_--_202606021251_3.webp", label: "Varanda do segundo andar com vista para as montanhas de Ibitipoca" },
-  { src: "/imgs-videos/melhoradas/externas/wide/Espaço_Externo_--_Wide_--_202606021251_4.webp", label: "Deck Panorâmico privativo do Chalé Toca do Lobo" },
+  { src: "/imgs-videos/melhoradas/externas/wide/Espaço_Externo_--_Wide_--_202606021251_4.webp", label: "Deck Panorâmico privativo da Casa Toca do Lobo" },
+  { src: "/imgs-videos/melhoradas/novas/casa_nova_1.webp", label: "Área externa da Casa Toca do Lobo com vista para o entardecer" },
+  { src: "/imgs-videos/melhoradas/novas/casa_nova_2.webp", label: "Visual integrado da natureza ao redor da Casa Toca do Lobo" },
+  { src: "/imgs-videos/melhoradas/novas/casa_nova_3.webp", label: "Deck de madeira ideal para contemplação do pôr do sol" },
+  { src: "/imgs-videos/melhoradas/novas/casa_nova_4.webp", label: "Ambiente interno rústico e aconchegante da Casa Toca do Lobo" },
+  { src: "/imgs-videos/melhoradas/novas/casa_nova_5.webp", label: "Espaço de convivência decorado da Casa" },
+  { src: "/imgs-videos/melhoradas/novas/casa_nova_6.webp", label: "Quarto confortável com iluminação natural na Casa" },
+  { src: "/imgs-videos/melhoradas/novas/casa_nova_7.webp", label: "Cozinha montada com detalhes em madeira rústica" },
+  { src: "/imgs-videos/melhoradas/novas/casa_nova_8.webp", label: "Sala de estar ampla integrada com lareira para dias frios" },
+  { src: "/imgs-videos/melhoradas/novas/casa_nova_9.webp", label: "Suíte aconchegante com vista para a serra de Ibitipoca" },
+  { src: "/imgs-videos/melhoradas/novas/casa_nova_10.webp", label: "Entrada receptiva e charmosa da Casa Toca do Lobo" },
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251.webp", label: "Banheiro luxuoso do segundo andar na hospedagem em Ibitipoca" },
-  { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_2.webp", label: "Quarto de casal confortável no 2º andar do chalé" },
+  { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_2.webp", label: "Quarto de casal confortável no 2º andar da casa" },
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_3.webp", label: "Quarto do primeiro andar com decoração rústica em Ibitipoca" },
-  { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_4.webp", label: "Cozinha completa para os hóspedes do Chalé Toca do Lobo" },
+  { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_4.webp", label: "Cozinha completa para os hóspedes da Casa Toca do Lobo" },
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_5.webp", label: "Quarto principal do primeiro andar com cama king size" },
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_6.webp", label: "Banheiro do primeiro andar com acabamento premium" },
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_7.webp", label: "Sala de estar do segundo andar com vista panorâmica" },
-  { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_8.webp", label: "Sala com lareira no primeiro andar da Pousada Toca do Lobo" },
-  { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_9.webp", label: "Suíte master do segundo andar no chalé em Ibitipoca" },
-  { src: "/imgs-videos/externa/hero_chale_paisagem_16-9.webp", label: "Vista espetacular da Serra de Ibitipoca a partir do chalé" },
+  { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_8.webp", label: "Sala com lareira no primeiro andar da Casa Toca do Lobo" },
+  { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_9.webp", label: "Suíte master do segundo andar na casa em Ibitipoca" },
+  { src: "/imgs-videos/externa/hero_chale_paisagem_16-9.webp", label: "Vista espetacular da Serra de Ibitipoca a partir da casa" }
 ];
 
 const GALLERY_ROWS = [
-  GALLERY_ITEMS.slice(0, 7),
-  GALLERY_ITEMS.slice(7)
+  GALLERY_ITEMS.slice(0, 12),
+  GALLERY_ITEMS.slice(12)
 ];
 
 const GALLERY_ICON_PATHS = {

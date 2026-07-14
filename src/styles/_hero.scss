@@ -247,6 +247,40 @@
           margin-left: -8px;
         }
       }
+
+      .avatar-initial {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 2px solid $neutral-dark;
+        margin-left: -10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: $neutral-dark;
+        text-transform: uppercase;
+        font-family: $font-headings;
+        user-select: none;
+
+        &:first-child { margin-left: 0; }
+
+        @media (max-width: 1024px) {
+          width: 30px;
+          height: 30px;
+          margin-left: -8px;
+          font-size: 0.75rem;
+        }
+
+        &.color-1 { background: #dca34b; }
+        &.color-2 { background: #556b2f; color: $warm-linen; }
+        &.color-3 { background: #c5a880; }
+        &.color-4 { background: #8fbc8f; }
+      }
     }
 
     .rating-info {

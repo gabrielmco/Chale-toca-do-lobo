@@ -20,7 +20,7 @@ function initMarqueeStage(stage) {
   const track = stage.querySelector('.scroll-marquee-track');
   if (!section || !track) return;
 
-  const marqueeText = 'CHALÉ TOCA DO LOBO — CHALÉ TOCA DO LOBO — CHALÉ TOCA DO LOBO —';
+  const marqueeText = 'CASA TOCA DO LOBO — CASA TOCA DO LOBO — CASA TOCA DO LOBO —';
   Array.from(track.children).forEach((child) => {
     child.textContent = marqueeText;
   });
