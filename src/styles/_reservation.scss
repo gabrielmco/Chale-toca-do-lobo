@@ -5,7 +5,7 @@
 
 .reserve-section {
   position: relative;
-  min-height: 100dvh;
+  min-height: 100svh;
   overflow: hidden;
   color: $warm-linen;
   background: $neutral-dark;
@@ -35,7 +35,7 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  min-height: 100dvh;
+  min-height: 100svh;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(420px, 0.78fr);
   gap: clamp(2.4rem, 6vw, 7rem);

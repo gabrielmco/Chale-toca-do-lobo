@@ -5,7 +5,7 @@
 
 .video-triptych-section {
   position: relative;
-  min-height: 104dvh;
+  min-height: 104svh;
   overflow: hidden;
   background: radial-gradient(circle at 50% 50%, #01312a 0%, #001210 80%), #001c18;
   color: $warm-linen;
@@ -17,7 +17,7 @@
 
 .video-triptych-inner {
   width: 100%;
-  min-height: calc(104dvh - clamp(8rem, 15vh, 11rem));
+  min-height: calc(104svh - clamp(8rem, 15vh, 11rem));
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr)); // 4 equal columns!
@@ -133,7 +133,7 @@
 .video-card {
   position: relative;
   aspect-ratio: 9 / 16;
-  min-height: min(66dvh, 620px);
+  min-height: min(66svh, 620px);
   overflow: visible; // Permite que a sombra e a borda apareçam sem cortes
   background: rgba($warm-linen, 0.04);
   border: 0;
@@ -283,7 +283,7 @@
   position: relative;
   aspect-ratio: 9 / 16;
   width: 100%;
-  min-height: min(66dvh, 620px);
+  min-height: min(66svh, 620px);
   background-color: transparent;
   border-radius: 0; // matching sharp corners of the video cards
   overflow: visible; // Permite que a silhueta com as patas sobreponha o card de vídeo vizinho

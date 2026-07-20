@@ -5,7 +5,7 @@
 
 .marquee-experiencias-stage {
   position: relative;
-  min-height: 100dvh;
+  min-height: 100svh;
   overflow: hidden;
   background: $neutral-dark;
   isolation: isolate;
@@ -15,7 +15,7 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  min-height: 100dvh;
+  min-height: 100svh;
   overflow: hidden;
   background-color: $neutral-dark;
   color: $warm-gray;
@@ -61,7 +61,7 @@
     position: relative;
     inset: auto;
     min-height: auto;
-    height: clamp(140px, 20dvh, 180px);
+    height: clamp(140px, 20svh, 180px);
     padding: 0;
     overflow: hidden;
     background-color: $neutral-dark;

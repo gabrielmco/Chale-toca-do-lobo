@@ -5,7 +5,7 @@
 
 .experiencias-section {
   position: relative;
-  min-height: 100dvh;
+  min-height: 100svh;
   background-color: $warm-linen;
   color: $moss-black;
   overflow: hidden;
@@ -14,7 +14,7 @@
 
   .reveal-content {
     width: 100%;
-    min-height: 100dvh;
+    min-height: 100svh;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -127,8 +127,8 @@
   }
 
   @media (max-width: 1024px) {
-    --closed-panel-height: clamp(78px, 9.6dvh, 104px);
-    --active-panel-height: clamp(430px, 62dvh, 520px);
+    --closed-panel-height: clamp(78px, 9.6svh, 104px);
+    --active-panel-height: clamp(430px, 62svh, 520px);
     flex-direction: column;
     height: auto;
     min-height: 0;
@@ -482,7 +482,7 @@
   top: 0;
   right: 0;
   width: 100vw;
-  height: 100dvh;
+  height: 100svh;
   overflow: hidden;
   display: flex;
   z-index: 5;
@@ -1193,8 +1193,8 @@
   }
 
   .chale-accordion {
-    --closed-panel-height: clamp(68px, 8.8dvh, 76px);
-    --active-panel-height: clamp(390px, 68dvh, 560px);
+    --closed-panel-height: clamp(68px, 8.8svh, 76px);
+    --active-panel-height: clamp(390px, 68svh, 560px);
     gap: 0.62rem;
   }
 

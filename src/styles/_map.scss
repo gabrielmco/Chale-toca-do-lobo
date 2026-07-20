@@ -5,7 +5,7 @@
 
 .location-map-section {
   position: relative;
-  min-height: 100dvh;
+  min-height: 100svh;
   overflow: hidden;
   padding: clamp(5.25rem, 8vh, 6.6rem) clamp(1rem, 2vw, 2rem) clamp(1rem, 2vw, 2rem);
   background: $warm-linen;
@@ -37,7 +37,7 @@
 .location-map-frame {
   position: relative;
   width: 100%;
-  min-height: calc(100dvh - clamp(6.25rem, 10vh, 8rem));
+  min-height: calc(100svh - clamp(6.25rem, 10vh, 8rem));
   display: block;
   padding: 0;
   border: 1px solid $moss-black;

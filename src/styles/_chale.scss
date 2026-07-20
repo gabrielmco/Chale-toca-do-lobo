@@ -9,7 +9,7 @@
   background-attachment: fixed;
   color: $warm-linen;
   width: 100vw;
-  height: 100dvh;
+  height: 100svh;
   box-sizing: border-box;
   overflow: hidden;
   z-index: 3;
@@ -254,7 +254,7 @@
 /* ─── Gallery Viewport ────────────────────────────────────────── */
 .chale-gallery-viewport {
   width: 100vw;
-  height: 100dvh;
+  height: 100svh;
   overflow: hidden;
   position: absolute;
   inset: 0;

@@ -306,7 +306,10 @@ export function initMobileMenu() {
     if (event.key === 'Escape') closeMenu();
   });
 
+  let lastMenuWidth = window.innerWidth;
   window.addEventListener('resize', () => {
+    if (window.innerWidth === lastMenuWidth) return; // Ignore height-only resizes from iOS address bar
+    lastMenuWidth = window.innerWidth;
     if (window.innerWidth > 1024) closeMenu();
   }, { passive: true });
 }
