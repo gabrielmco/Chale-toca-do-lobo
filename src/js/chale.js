@@ -96,69 +96,31 @@ export function initChale() {
   });
 
   track.innerHTML = "";
-  const galleryRows = isResponsiveLayout ? [GALLERY_ITEMS] : GALLERY_ROWS;
-
-  galleryRows.forEach((rowItems, rowIndex) => {
-    const row = document.createElement("div");
-    row.classList.add("chale-gallery-row", rowIndex === 0 ? "chale-gallery-row-top" : "chale-gallery-row-bottom");
-
-    rowItems.forEach((item) => {
-    const slide = document.createElement("div");
-    slide.classList.add("chale-slide");
-    slide.setAttribute("role", "button");
-    slide.setAttribute("tabindex", "0");
-    slide.setAttribute("aria-label", `Ampliar imagem: ${item.label}`);
-
-    const img = document.createElement("img");
-    img.src = item.src;
-    img.alt = item.label;
-    img.loading = "lazy";
-    img.decoding = "async";
-    img.draggable = false;
-
-    const overlay = document.createElement("div");
-    overlay.classList.add("slide-overlay");
-
-    const caption = document.createElement("div");
-    caption.classList.add("slide-caption");
-    caption.innerHTML = `
-      <span class="slide-caption-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none">
-          ${getGalleryIcon(item.label)}
-        </svg>
-      </span>
-      <span class="slide-caption-text">${item.label}</span>
-      <span class="slide-caption-line" aria-hidden="true"></span>
-    `;
-
-    const zoomBadge = document.createElement("div");
-    zoomBadge.classList.add("slide-zoom-badge");
-    zoomBadge.setAttribute("aria-hidden", "true");
-    zoomBadge.innerHTML = `
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="12" y1="5" x2="12" y2="19"></line>
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-      </svg>
-    `;
-
-    slide.append(img, overlay, caption, zoomBadge);
-      slide.addEventListener("click", () => {
-        lightbox.open(item);
-      });
-      slide.addEventListener("keydown", (event) => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
-        lightbox.open(item);
-      });
-      row.appendChild(slide);
-    });
-
-    track.appendChild(row);
-  });
+  const initialBatchCount = 6;
 
   if (isResponsiveLayout) {
-    initResponsiveChaleCarousel(chaleSection, track);
+    // Mobile: Render only first 6 slides initially
+    const initialBatch = GALLERY_ITEMS.slice(0, initialBatchCount);
+    const row = document.createElement("div");
+    row.classList.add("chale-gallery-row", "chale-gallery-row-top");
+    initialBatch.forEach((item) => {
+      const slide = createSlideElement(item, lightbox);
+      row.appendChild(slide);
+    });
+    track.appendChild(row);
+
+    initResponsiveChaleCarousel(chaleSection, track, GALLERY_ITEMS.slice(initialBatchCount), lightbox);
   } else {
+    // Desktop: Render everything immediately
+    GALLERY_ROWS.forEach((rowItems, rowIndex) => {
+      const row = document.createElement("div");
+      row.classList.add("chale-gallery-row", rowIndex === 0 ? "chale-gallery-row-top" : "chale-gallery-row-bottom");
+      rowItems.forEach((item) => {
+        const slide = createSlideElement(item, lightbox);
+        row.appendChild(slide);
+      });
+      track.appendChild(row);
+    });
     chaleSection.querySelector(".chale-carousel-controls")?.remove();
     chaleSection.querySelector(".chale-carousel-hint")?.remove();
   }
@@ -197,9 +159,60 @@ export function initChale() {
   window.addEventListener("resize", resizeRefreshHandler, { passive: true });
 }
 
-function initResponsiveChaleCarousel(chaleSection, track) {
+function createSlideElement(item, lightbox) {
+  const slide = document.createElement("div");
+  slide.classList.add("chale-slide");
+  slide.setAttribute("role", "button");
+  slide.setAttribute("tabindex", "0");
+  slide.setAttribute("aria-label", `Ampliar imagem: ${item.label}`);
+
+  const img = document.createElement("img");
+  img.src = item.src;
+  img.alt = item.label;
+  img.loading = "lazy";
+  img.decoding = "async";
+  img.draggable = false;
+
+  const overlay = document.createElement("div");
+  overlay.classList.add("slide-overlay");
+
+  const caption = document.createElement("div");
+  caption.classList.add("slide-caption");
+  caption.innerHTML = `
+    <span class="slide-caption-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        ${getGalleryIcon(item.label)}
+      </svg>
+    </span>
+    <span class="slide-caption-text">${item.label}</span>
+    <span class="slide-caption-line" aria-hidden="true"></span>
+  `;
+
+  const zoomBadge = document.createElement("div");
+  zoomBadge.classList.add("slide-zoom-badge");
+  zoomBadge.setAttribute("aria-hidden", "true");
+  zoomBadge.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19"></line>
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
+  `;
+
+  slide.append(img, overlay, caption, zoomBadge);
+  slide.addEventListener("click", () => {
+    lightbox.open(item);
+  });
+  slide.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    lightbox.open(item);
+  });
+  return slide;
+}
+
+function initResponsiveChaleCarousel(chaleSection, track, remainingItems = [], lightbox) {
   const row = track.querySelector(".chale-gallery-row");
-  const slides = Array.from(track.querySelectorAll(".chale-slide"));
+  let slides = Array.from(track.querySelectorAll(".chale-slide"));
   if (!row || !slides.length) return;
 
   const existingControls = chaleSection.querySelector(".chale-carousel-controls");
@@ -212,6 +225,12 @@ function initResponsiveChaleCarousel(chaleSection, track) {
   hint.textContent = "Toque na foto para ampliar";
   track.insertAdjacentElement("beforebegin", hint);
 
+  // Pre-generate dot slots matching the total amount of slides (24)
+  const totalSlidesCount = slides.length + remainingItems.length;
+  const dotsHtml = Array.from({ length: totalSlidesCount })
+    .map((_, index) => `<span class="chale-carousel-dot${index === 0 ? " is-active" : ""}"></span>`)
+    .join("");
+
   const controls = document.createElement("div");
   controls.className = "chale-carousel-controls";
   controls.innerHTML = `
@@ -221,7 +240,7 @@ function initResponsiveChaleCarousel(chaleSection, track) {
       </svg>
     </button>
     <div class="chale-carousel-dots" aria-hidden="true">
-      ${slides.map((_slide, index) => `<span class="chale-carousel-dot${index === 0 ? " is-active" : ""}"></span>`).join("")}
+      ${dotsHtml}
     </div>
     <button class="chale-carousel-btn chale-carousel-next" type="button" aria-label="Pr&oacute;xima imagem">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -234,7 +253,7 @@ function initResponsiveChaleCarousel(chaleSection, track) {
 
   const prev = controls.querySelector(".chale-carousel-prev");
   const next = controls.querySelector(".chale-carousel-next");
-  const dots = Array.from(controls.querySelectorAll(".chale-carousel-dot"));
+  let dots = Array.from(controls.querySelectorAll(".chale-carousel-dot"));
 
   const getStep = () => {
     const firstSlide = slides[0];
@@ -285,6 +304,25 @@ function initResponsiveChaleCarousel(chaleSection, track) {
   prev?.addEventListener("click", () => scrollByDirection(-1));
   next?.addEventListener("click", () => scrollByDirection(1));
   updateDots();
+
+  // Defer-append the remaining slides to save main-thread execution time
+  if (remainingItems.length > 0) {
+    const appendRemaining = () => {
+      remainingItems.forEach((item) => {
+        const slide = createSlideElement(item, lightbox);
+        row.appendChild(slide);
+      });
+      // Re-query slides array to contain all 24 slides
+      slides = Array.from(track.querySelectorAll(".chale-slide"));
+      updateDots();
+    };
+
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(appendRemaining, { timeout: 3000 });
+    } else {
+      setTimeout(appendRemaining, 2000);
+    }
+  }
 }
 
 function getGalleryIcon(label = "") {

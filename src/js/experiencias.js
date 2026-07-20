@@ -217,6 +217,38 @@ export function initExperiencias() {
   const accordions = Array.from(document.querySelectorAll(".chale-accordion"));
   if (!accordions.length) return;
 
+  // Instantly load the active panel's background to avoid any delay
+  const activePanelBg = document.querySelector('.accordion-panel.active .panel-bg[data-bg]');
+  if (activePanelBg) {
+    const bgUrl = activePanelBg.getAttribute('data-bg');
+    if (bgUrl) {
+      activePanelBg.style.backgroundImage = `url('${bgUrl}')`;
+      activePanelBg.removeAttribute('data-bg');
+    }
+  }
+
+  // Lazy-load other background images when they are close to the viewport
+  const bgObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const bgEl = entry.target;
+        const bgUrl = bgEl.getAttribute('data-bg');
+        if (bgUrl) {
+          bgEl.style.backgroundImage = `url('${bgUrl}')`;
+          bgEl.removeAttribute('data-bg');
+        }
+        observer.unobserve(bgEl);
+      }
+    });
+  }, {
+    rootMargin: '200px',
+    threshold: 0.01
+  });
+
+  document.querySelectorAll('.panel-bg[data-bg]').forEach((bgEl) => {
+    bgObserver.observe(bgEl);
+  });
+
   const sideDrawer = document.getElementById("side-drawer");
   const drawerContainer = sideDrawer ? sideDrawer.querySelector(".drawer-container") : null;
   const backdrop = document.getElementById("drawer-backdrop");
@@ -913,15 +945,32 @@ export function initExperiencias() {
         //  PHASE 2 — UPDATE  (sync DOM swap while everything hidden)
         // ──────────────────────────────────────────────────────────
         currentDrawerDataId = dataId;
+
+        // 1. Revert previous SplitText instances first
+        if (drawerTitleSplit) {
+          drawerTitleSplit.revert();
+          drawerTitleSplit = null;
+        }
+        if (drawerSubtitleSplit) {
+          drawerSubtitleSplit.revert();
+          drawerSubtitleSplit = null;
+        }
+
+        // 2. Clear inline animation styles
+        gsap.set([badgeEl, titleEl, subtitleEl, textEl, ctaEl, nextBtn].filter(Boolean), { clearProps: "all" });
+
+        // 3. Update DOM content
         badgeEl.textContent = data.badge;
         titleEl.textContent = data.title;
         subtitleEl.textContent = data.subtitle;
         textEl.innerHTML = data.text;
 
-        if (drawerTitleSplit) drawerTitleSplit.revert();
-        if (drawerSubtitleSplit) drawerSubtitleSplit.revert();
-        drawerTitleSplit = SplitText.create(titleEl, { type: "lines", mask: "lines" });
-        drawerSubtitleSplit = SplitText.create(subtitleEl, { type: "lines", mask: "lines" });
+        // 4. Create new SplitText instances
+        drawerTitleSplit = SplitText.create(titleEl, { type: "lines", mask: "lines", aria: "auto" });
+        drawerSubtitleSplit = SplitText.create(subtitleEl, { type: "lines", mask: "lines", aria: "auto" });
+
+        if (titleEl) titleEl.removeAttribute("aria-label");
+        if (subtitleEl) subtitleEl.removeAttribute("aria-label");
 
         const newTitleLines = drawerTitleSplit ? drawerTitleSplit.lines : [titleEl];
         const newSubtitleLines = drawerSubtitleSplit ? drawerSubtitleSplit.lines : [subtitleEl];
@@ -944,7 +993,7 @@ export function initExperiencias() {
           ...newTextBlocks, ctaEl, nextBtn
         ].filter(Boolean);
 
-        // Pre-set hidden state
+        // Pre-set hidden state for enter animation
         gsap.set(enterTargets, { y: 35, autoAlpha: 0, clipPath: "inset(12% 0% 0% 0%)" });
         gsap.set(supportEls, { y: 12, autoAlpha: 0 });
 
@@ -1029,6 +1078,9 @@ export function initExperiencias() {
 
     drawerTitleSplit = SplitText.create(titleEl, { type: "lines", mask: "lines", aria: "auto" });
     drawerSubtitleSplit = SplitText.create(subtitleEl, { type: "lines", mask: "lines", aria: "auto" });
+
+    if (titleEl) titleEl.removeAttribute("aria-label");
+    if (subtitleEl) subtitleEl.removeAttribute("aria-label");
     const titleLines = drawerTitleSplit ? drawerTitleSplit.lines : [titleEl];
     const subtitleLines = drawerSubtitleSplit ? drawerSubtitleSplit.lines : [subtitleEl];
     const textBlocks = Array.from(textEl.querySelectorAll(".drawer-detail-grid, p, h4, .drawer-feature-list"));
@@ -1242,6 +1294,49 @@ export function initExperiencias() {
   if (closeBtn) closeBtn.addEventListener("click", closeDrawer);
   if (backdrop) backdrop.addEventListener("click", closeDrawer);
 
+  const ctaBtn = document.getElementById("drawer-cta");
+  if (ctaBtn) {
+    ctaBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      
+      // Close drawer instantly
+      if (sideDrawer) {
+        sideDrawer.classList.remove("open");
+        sideDrawer.setAttribute("aria-hidden", "true");
+      }
+      
+      stopDrawerImageLoop();
+      killSlideTransition();
+      killContentTransitions();
+      
+      if (window.drawerLenis) {
+        gsap.ticker.remove(window.drawerRaf);
+        window.drawerLenis.destroy();
+        window.drawerLenis = null;
+        window.drawerRaf = null;
+      }
+      
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      
+      if (smoothScroll.lenis) {
+        smoothScroll.lenis.start();
+      }
+      
+      // Jump to reserve section instantly
+      const targetElement = document.getElementById("reservar");
+      if (targetElement) {
+        if (smoothScroll.lenis) {
+          smoothScroll.lenis.scrollTo(targetElement, {
+            immediate: true
+          });
+        } else {
+          targetElement.scrollIntoView({ behavior: "auto" });
+        }
+      }
+    });
+  }
+
   // "Próximo ponto" button in the drawer
   const nextBtn = document.getElementById("drawer-next-btn");
   if (nextBtn) {
@@ -1291,6 +1386,10 @@ function initExperienciasReveal(accordion, prefersReducedMotion) {
   const sub = section.querySelector(".experiencias-sub");
   const titleSplit = title ? SplitText.create(title, { type: "lines", mask: "lines" }) : null;
   const subSplit = sub ? SplitText.create(sub, { type: "lines", mask: "lines" }) : null;
+
+  if (supra) supra.removeAttribute("aria-label");
+  if (title) title.removeAttribute("aria-label");
+  if (sub) sub.removeAttribute("aria-label");
   const introItems = [
     supra,
     ...(titleSplit ? titleSplit.lines : title ? [title] : []),

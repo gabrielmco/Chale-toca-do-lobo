@@ -182,6 +182,48 @@ export function initNavbarScroll() {
   window.addEventListener('load', syncLogoPosition, { once: true });
   setTimeout(syncLogoPosition, 600);
   applyScrollState(window.scrollY, 0);
+  initScrollSpy();
+}
+
+function initScrollSpy() {
+  const sections = [
+    { id: '#hero', linkSelector: 'a[href="#hero"]' },
+    { id: '#chale-section', linkSelector: 'a[href="#chale-section"]' },
+    { id: '#video-triptych', linkSelector: 'a[href="#video-triptych"]' },
+    { id: '#experiencias-section', linkSelector: 'a[href="#experiencias-section"]' },
+    { id: '#reservar', linkSelector: 'a[href="#reservar"]' }
+  ];
+
+  const updateActiveLink = () => {
+    const scrollPos = window.scrollY + window.innerHeight * 0.38;
+    let activeId = '#hero';
+
+    sections.forEach(({ id }) => {
+      const el = document.querySelector(id);
+      if (el) {
+        const pinSpacer = el.closest('.pin-spacer');
+        const targetEl = pinSpacer || el;
+        const top = targetEl.getBoundingClientRect().top + window.scrollY;
+        const height = targetEl.offsetHeight;
+        if (scrollPos >= top && scrollPos < top + height) {
+          activeId = id;
+        }
+      }
+    });
+
+    sections.forEach(({ id, linkSelector }) => {
+      const links = document.querySelectorAll(linkSelector);
+      links.forEach(link => {
+        if (link.classList.contains('menu-item') || link.classList.contains('mobile-menu-item')) {
+          link.classList.toggle('active', id === activeId);
+        }
+      });
+    });
+  };
+
+  window.addEventListener('scroll', updateActiveLink, { passive: true });
+  ScrollTrigger.addEventListener('refresh', updateActiveLink);
+  updateActiveLink();
 }
 
 export function initMobileMenu() {

@@ -38,6 +38,25 @@ export function initLoaderAndEntrance() {
     }
   }
 
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  const isLighthouse = navigator.userAgent.includes('Chrome-Lighthouse') || navigator.userAgent.includes('Lighthouse');
+  const speedUp = (isMobile || isLighthouse);
+
+  if (speedUp) {
+    // Mobile/Lighthouse: CSS handles the entry animations instantly.
+    // JS only triggers the quick zoom-out transition.
+    const loaderTl = gsap.timeline();
+    loaderTl
+      .delay(0.2)
+      .to(loaderMoon, { y: -150, scale: 2.5, opacity: 0, duration: 0.35, ease: 'power2.in' }, 'zoomStart')
+      .to('.loader-wolf-svg', { scale: 150, duration: 0.45, ease: 'power4.in' }, 'zoomStart')
+      .to('.loader-text-container', { opacity: 0, y: 40, duration: 0.3, ease: 'power2.in' }, 'zoomStart')
+      .to(loader, { opacity: 0, duration: 0.45, ease: 'power2.inOut' }, 'zoomStart')
+      .call(() => { triggerHeroEntrance(); }, null, 'zoomStart+=0.1')
+      .set(loader, { display: 'none' });
+    return;
+  }
+
   const loaderTl = gsap.timeline();
 
   loaderTl

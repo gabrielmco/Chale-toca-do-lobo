@@ -36,6 +36,11 @@ export function initFeedbackReveal() {
     mask: 'words',
     wordsClass: 'feedback-sub-word'
   }) : null;
+
+  if (kicker) kicker.removeAttribute('aria-label');
+  if (title) title.removeAttribute('aria-label');
+  if (sub) sub.removeAttribute('aria-label');
+
   const kickerWords = kickerSplit ? kickerSplit.words : kicker ? [kicker] : [];
   const titleWords = titleSplit ? titleSplit.words : title ? [title] : [];
   const subWords = subSplit ? subSplit.words : sub ? [sub] : [];

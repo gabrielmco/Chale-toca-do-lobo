@@ -4,4 +4,4 @@ Disallow: /*?*
 Disallow: /admin
 Disallow: /api
 
-Sitemap: https://chaletocadolobo.com.br/sitemap.xml
+Sitemap: https://tocadoloboibitipoca.com.br/sitemap.xml

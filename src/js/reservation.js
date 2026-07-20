@@ -36,6 +36,7 @@ export function initReservationReveal() {
     mask: 'lines',
     aria: 'auto'
   }) : null;
+  if (title) title.removeAttribute('aria-label');
   const titleItems = titleSplit ? titleSplit.lines : title ? [title] : [];
   const form = section.querySelector('.reserve-form');
   const formItems = form ? Array.from(form.querySelectorAll(
@@ -115,7 +116,7 @@ export function initReservationReveal() {
     scrollTrigger: {
       trigger: section,
       start: 'top 95%',
-      end: 'bottom 95%',
+      end: 'bottom 92%',
       scrub: 1.0,
       invalidateOnRefresh: true,
       refreshPriority: -150

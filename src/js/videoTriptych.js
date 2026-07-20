@@ -30,16 +30,7 @@ export function initVideoTriptych() {
     video.muted = true;
     video.loop = true;
     video.playsInline = true;
-
-    const playVideo = () => {
-      video.play().catch(() => { });
-    };
-
-    if (video.readyState >= 2) {
-      playVideo();
-    } else {
-      video.addEventListener('loadeddata', playVideo, { once: true });
-    }
+    video.pause();
   });
 
   // initVideoCopyReveal(section, prefersReducedMotion);
@@ -53,30 +44,52 @@ export function initVideoTriptych() {
 
   if (prefersReducedMotion) {
     gsap.set([...allRevealItems, ...wrappers, ...videos], { clearProps: 'opacity,visibility,transform,willChange' });
-    return;
+  } else {
+    gsap.fromTo(allRevealItems,
+      {
+        y: 72,
+        autoAlpha: 0,
+        willChange: 'transform, opacity'
+      },
+      {
+        y: 0,
+        autoAlpha: 1,
+        duration: 1.02,
+        stagger: 0.08,
+        ease: 'power4.out',
+        clearProps: 'transform, willChange', // Clear transforms on completion to allow CSS media queries to override
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 68%',
+          once: true,
+          invalidateOnRefresh: true
+        }
+      }
+    );
   }
 
-  gsap.fromTo(allRevealItems,
-    {
-      y: 72,
-      autoAlpha: 0,
-      willChange: 'transform, opacity'
-    },
-    {
-      y: 0,
-      autoAlpha: 1,
-      duration: 1.02,
-      stagger: 0.08,
-      ease: 'power4.out',
-      clearProps: 'transform, willChange', // Clear transforms on completion to allow CSS media queries to override
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 68%',
-        once: true,
-        invalidateOnRefresh: true
+  // Lazy-play / Pause all videos when they enter/leave viewport
+  const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const video = entry.target;
+      if (entry.isIntersecting) {
+        if (video.paused) {
+          video.play().catch(() => {});
+        }
+      } else {
+        if (!video.paused) {
+          video.pause();
+        }
       }
-    }
-  );
+    });
+  }, {
+    rootMargin: '120px',
+    threshold: 0.02
+  });
+
+  section.querySelectorAll('video').forEach((video) => {
+    videoObserver.observe(video);
+  });
 }
 
 function initResponsiveVideoCarousel(section, cards) {
@@ -90,35 +103,13 @@ function initResponsiveVideoCarousel(section, cards) {
   const realCards = Array.from(cards);
   realCards.forEach((card, index) => {
     card.dataset.videoIndex = String(index);
-    card.classList.remove('is-clone', 'is-active');
-    card.removeAttribute('aria-hidden');
+    card.classList.remove('is-clone');
+    if (index === 0) {
+      card.classList.add('is-active');
+    } else {
+      card.classList.remove('is-active');
+    }
   });
-
-  const buildClone = (card) => {
-    const clone = card.cloneNode(true);
-    clone.classList.add('is-clone');
-    clone.classList.remove('is-active');
-    clone.setAttribute('aria-hidden', 'true');
-    clone.setAttribute('tabindex', '-1');
-    clone.querySelectorAll('video').forEach((video) => {
-      video.muted = true;
-      video.loop = true;
-      video.playsInline = true;
-      video.play().catch(() => {});
-    });
-    return clone;
-  };
-
-  const beforeFragment = document.createDocumentFragment();
-  const afterFragment = document.createDocumentFragment();
-  for (let set = 0; set < 2; set += 1) {
-    realCards.forEach((card) => {
-      beforeFragment.appendChild(buildClone(card));
-      afterFragment.appendChild(buildClone(card));
-    });
-  }
-  carousel.prepend(beforeFragment);
-  carousel.append(afterFragment);
 
   const existingControls = section.querySelector('.video-carousel-controls');
   if (existingControls) existingControls.remove();
@@ -146,12 +137,6 @@ function initResponsiveVideoCarousel(section, cards) {
   const prev = controls.querySelector('.video-carousel-prev');
   const next = controls.querySelector('.video-carousel-next');
   const dots = Array.from(controls.querySelectorAll('.video-carousel-dots span'));
-  const allCards = Array.from(carousel.querySelectorAll('[data-video-card]'));
-  const realCount = realCards.length;
-  const realStartIndex = realCount * 2;
-  const realEndIndex = realStartIndex + realCount - 1;
-  let scrollTimer = null;
-  let isResettingLoop = false;
 
   const getCardLeft = (card) => card.offsetLeft - (carousel.clientWidth - card.offsetWidth) * 0.5;
 
@@ -160,7 +145,7 @@ function initResponsiveVideoCarousel(section, cards) {
     let activeIndex = 0;
     let activeDistance = Infinity;
 
-    allCards.forEach((card, index) => {
+    realCards.forEach((card, index) => {
       const cardCenter = card.offsetLeft + card.offsetWidth * 0.5;
       const distance = Math.abs(cardCenter - center);
       if (distance < activeDistance) {
@@ -172,81 +157,39 @@ function initResponsiveVideoCarousel(section, cards) {
     return activeIndex;
   };
 
-  const scrollToCard = (card, behavior = 'smooth') => {
-    if (!card) return;
-    carousel.scrollTo({
-      left: getCardLeft(card),
-      behavior
-    });
-  };
-
   const updateDots = () => {
-    const activeDomIndex = getCenteredIndex();
-    const activeCard = allCards[activeDomIndex];
-    const activeRealIndex = Number(activeCard?.dataset.videoIndex || 0);
-
-    allCards.forEach((card, index) => {
-      card.classList.toggle('is-active', index === activeDomIndex);
+    const activeIndex = getCenteredIndex();
+    realCards.forEach((card, index) => {
+      card.classList.toggle('is-active', index === activeIndex);
     });
-
     dots.forEach((dot, index) => {
-      dot.classList.toggle('is-active', index === activeRealIndex);
+      dot.classList.toggle('is-active', index === activeIndex);
     });
   };
 
-  const normalizeLoop = () => {
-    if (isResettingLoop) return;
-
-    const activeDomIndex = getCenteredIndex();
-    let targetIndex = activeDomIndex;
-
-    if (activeDomIndex < realCount) {
-      targetIndex = activeDomIndex + realCount * 2;
-    } else if (activeDomIndex > realEndIndex + realCount) {
-      targetIndex = activeDomIndex - realCount * 2;
-    }
-
-    if (targetIndex === activeDomIndex) {
-      updateDots();
-      return;
-    }
-
-    isResettingLoop = true;
-    scrollToCard(allCards[targetIndex], 'auto');
-    requestAnimationFrame(() => {
-      isResettingLoop = false;
-      updateDots();
-    });
-  };
-
-  const scrollByDirection = (direction) => {
-    const activeDomIndex = getCenteredIndex();
-    const targetIndex = gsap.utils.clamp(0, allCards.length - 1, activeDomIndex + direction);
-    scrollToCard(allCards[targetIndex], 'smooth');
-    window.clearTimeout(scrollTimer);
-    scrollTimer = window.setTimeout(normalizeLoop, 520);
-  };
-
-  let ticking = false;
+  let scrollTimer = null;
   carousel.addEventListener('scroll', () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      updateDots();
-      ticking = false;
-    });
     window.clearTimeout(scrollTimer);
-    scrollTimer = window.setTimeout(normalizeLoop, 180);
+    scrollTimer = window.setTimeout(updateDots, 60);
   }, { passive: true });
 
-  prev?.addEventListener('click', () => scrollByDirection(-1));
-  next?.addEventListener('click', () => scrollByDirection(1));
+  const navigate = (direction) => {
+    const currentIndex = getCenteredIndex();
+    const targetIndex = Math.max(0, Math.min(realCards.length - 1, currentIndex + direction));
+    const targetCard = realCards[targetIndex];
+    if (targetCard) {
+      carousel.scrollTo({
+        left: getCardLeft(targetCard),
+        behavior: 'smooth'
+      });
+    }
+  };
 
-  requestAnimationFrame(() => {
-    const initialIndex = realStartIndex + (realCount > 1 ? 1 : 0);
-    scrollToCard(allCards[initialIndex], 'auto');
-    updateDots();
-  });
+  prev?.addEventListener('click', () => navigate(-1));
+  next?.addEventListener('click', () => navigate(1));
+
+  // Initial call
+  updateDots();
 }
 
 function initVideoLogoReveal(section, prefersReducedMotion, isResponsiveLayout = false) {

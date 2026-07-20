@@ -53,61 +53,87 @@
     top: 50%;
     left: var(--nav-logo-left);
     transform: translate(-50%, -50%);
-    font-family: $font-headings;
-    font-weight: 700;
-    font-size: 1.25rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: $warm-linen;
     display: flex;
     align-items: center;
     gap: 0.8rem;
+    height: 72px;
+    width: 72px;
 
     @media (max-width: 1024px) {
       position: relative;
       top: auto;
       left: auto;
       transform: none;
+      height: 52px;
+      width: 52px;
+    }
+
+    @media (max-width: 420px) {
+      height: 46px;
+      width: 46px;
     }
 
     .wolf-logo-svg {
-      width: 82px;
-      height: 82px;
-      color: $warm-linen;
-      transition: transform 1.2s $ease-buttery, color 1.2s $ease-buttery;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 72px;
+      height: 72px;
+      transition: transform 0.6s $ease-buttery, clip-path 0.8s cubic-bezier(0.25, 1, 0.5, 1), fill 0.6s ease, stroke 0.6s ease;
 
       @media (max-width: 1024px) {
-        width: 58px;
-        height: 58px;
-      }
-
-      @media (max-width: 420px) {
         width: 52px;
         height: 52px;
       }
+
+      @media (max-width: 420px) {
+        width: 46px;
+        height: 46px;
+      }
+    }
+
+    .wolf-bg {
+      color: $warm-linen;
+      fill: currentColor;
+      z-index: 1;
+    }
+
+    .wolf-fill {
+      color: $moss-black;
+      fill: currentColor;
+      stroke: $warm-linen;
+      stroke-width: 20px;
+      paint-order: stroke fill;
+      clip-path: inset(100% 0 0 0);
+      z-index: 2;
     }
 
     .moon-logo-svg {
       position: absolute;
       top: 4px;
-      right: -24px;
-      width: 28px;
-      height: 28px;
+      right: -21px;
+      width: 24px;
+      height: 24px;
       color: $amber-sunset;
       opacity: 0;
       transform: translateY(-130px) scale(0.5);
       transition: transform 1.2s $ease-buttery, opacity 1.2s ease, filter 1.2s ease;
       pointer-events: none;
+      z-index: 3;
       filter: drop-shadow(0 0 0px rgba($warm-linen, 0));
     }
 
     &:hover {
-      .wolf-logo-svg {
-        transform: rotate(-8deg) scale(1.03);
+      .wolf-bg, .wolf-fill {
+        transform: translate(-50%, -50%) rotate(-8deg) scale(1.05);
+      }
+      .wolf-fill {
+        clip-path: inset(0% 0 0 0);
       }
       .moon-logo-svg {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(-6px) scale(1.1);
         filter: drop-shadow(0 0 12px rgba($warm-linen, 0.95));
       }
     }

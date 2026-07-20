@@ -139,7 +139,7 @@
   }
 
   strong,
-  span {
+  div span {
     display: block;
   }
 
@@ -151,7 +151,7 @@
     text-transform: uppercase;
   }
 
-  span {
+  div span {
     margin-top: 0.25rem;
     color: rgba($warm-linen, 0.58);
     font-family: $font-body;

@@ -280,7 +280,9 @@
   width: max-content;
   gap: clamp(0.75rem, 1vw, 1.05rem);
   padding: 0 4rem;
-  will-change: transform;
+  will-change: transform, opacity, visibility;
+  visibility: hidden;
+  opacity: 0;
 
   @media (max-width: 1024px) {
     padding: 0 2rem;
