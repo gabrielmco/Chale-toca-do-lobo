@@ -880,26 +880,30 @@ function buildChaleResponsiveTimeline({
     localTriggers.push(galleryControlsTrigger.scrollTrigger);
   }
 
-  // 5. Revelação dos Slides do Carrossel (conforme entram na tela)
-  rows.forEach((row) => {
-    const rowTrigger = gsap.fromTo(row,
-      { y: 30, autoAlpha: 0, scale: 0.985 },
-      {
-        y: 0,
-        scale: 1,
-        autoAlpha: 1,
-        duration: 0.8,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: row,
-          start: "top 92%",
-          once: true,
-          invalidateOnRefresh: true
+  // 5. Revelação dos Slides do Carrossel (apenas em layout responsivo/mobile)
+  if (isResponsiveLayout) {
+    rows.forEach((row) => {
+      const rowTrigger = gsap.fromTo(row,
+        { y: 30, autoAlpha: 0, scale: 0.985 },
+        {
+          y: 0,
+          scale: 1,
+          autoAlpha: 1,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: row,
+            start: "top 92%",
+            once: true,
+            invalidateOnRefresh: true
+          }
         }
-      }
-    );
-    localTriggers.push(rowTrigger.scrollTrigger);
-  });
+      );
+      localTriggers.push(rowTrigger.scrollTrigger);
+    });
+  } else {
+    gsap.set(rows, { autoAlpha: 1, y: 0, scale: 1 });
+  }
 
   gsap.set([titleWrapper, subWrapper, headerRight, ...introTargets].filter(Boolean), {
     clearProps: "willChange"

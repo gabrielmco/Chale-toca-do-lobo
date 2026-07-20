@@ -116,7 +116,7 @@ export function initReservationReveal() {
     scrollTrigger: {
       trigger: section,
       start: 'top 95%',
-      end: 'bottom 92%',
+      end: 'bottom 90%',
       scrub: 1.0,
       invalidateOnRefresh: true,
       refreshPriority: -150
