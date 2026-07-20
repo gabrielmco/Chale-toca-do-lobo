@@ -88,45 +88,29 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   const setupObservers = () => {
-    // Set up IntersectionObservers for scroll-driven loading
-    const chaleSection = document.getElementById('chale-section');
-    if (chaleSection && 'IntersectionObserver' in window) {
-      const observerMid = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          observerMid.disconnect();
-          loadMid();
-        }
-      }, { rootMargin: '-50px' });
-      observerMid.observe(chaleSection);
+    // Eagerly preload mid and bottom sections during page load/loader screen
+    // so GSAP ScrollTriggers are fully initialized before user starts scrolling.
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => {
+        loadMid();
+        loadBottom();
+      }, { timeout: 1500 });
     } else {
-      loadMid();
-    }
-
-    const feedbackSection = document.getElementById('feedback-section');
-    if (feedbackSection && 'IntersectionObserver' in window) {
-      const observerBottom = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          observerBottom.disconnect();
-          loadBottom();
-        }
-      }, { rootMargin: '-50px' });
-      observerBottom.observe(feedbackSection);
-    } else {
-      loadBottom();
+      setTimeout(() => {
+        loadMid();
+        loadBottom();
+      }, 50);
     }
   };
+
+  // Immediate eager load of critical mid sections
+  loadMid();
 
   if (document.readyState === 'complete') {
     setupObservers();
   } else {
     window.addEventListener('load', setupObservers);
   }
-
-  // Fallback to load everything after 12 seconds if not already loaded (e.g. slow user or crawler)
-  setTimeout(() => {
-    loadMid();
-    loadBottom();
-  }, 12000);
 });
 
 // Resolver o travamento do scroll (Lenis) ao passar o mouse em cima do mapa
