@@ -58,17 +58,29 @@
   font-family: $font-headings;
   font-size: clamp(2.45rem, 4.15vw, 5.15rem);
   font-weight: 800;
-  line-height: 0.98;
+  line-height: 1.12;
   letter-spacing: 0;
   text-transform: uppercase;
-  text-wrap: pretty;
+  text-wrap: balance;
+  padding-top: 0.12em;
+
+  @media (max-width: 1024px) {
+    font-size: clamp(1.45rem, 5.2vw, 2.35rem);
+    line-height: 1.15;
+  }
+}
+
+.feedback-title-word {
+  display: inline-block;
+  padding-top: 0.12em;
+  margin-top: -0.12em;
+  will-change: transform;
 }
 
 .feedback-kicker-word,
-.feedback-title-word,
 .feedback-sub-word {
   display: inline-block;
-  will-change: transform, opacity;
+  will-change: transform;
 }
 
 .feedback-sub {

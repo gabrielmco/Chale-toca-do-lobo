@@ -114,21 +114,21 @@ export function initLoaderAndEntrance() {
 function triggerHeroEntrance() {
   const heroBg     = document.getElementById('hero-bg');
   const heroBadge  = document.querySelector('.hero-badge');
-  const revealLines = document.querySelectorAll('.reveal-line');
+  const revealLines = document.querySelectorAll('.hero-title .reveal-line');
   const heroDesc   = document.querySelector('.hero-description');
   const heroCtaGroup = document.querySelector('.hero-cta-group');
   const navbar     = document.getElementById('main-navbar');
 
   gsap.set(navbar, { y: -50, opacity: 0 });
   gsap.set(heroBadge, { y: 25, opacity: 0 });
-  gsap.set(revealLines, { yPercent: 105 });
+  gsap.set(revealLines, { y: '102%', opacity: 1 });
   gsap.set(heroDesc, { y: 25, opacity: 0 });
   gsap.set(heroCtaGroup, { y: 25, opacity: 0 });
 
   gsap.timeline()
     .to(heroBg,       { scale: 1.1, duration: 2.2, ease: 'power3.out' })
     .to(heroBadge,    { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }, '-=1.8')
-    .to(revealLines,  { yPercent: 0, duration: 1.6, stagger: 0.15, ease: 'power4.out' }, '-=1.5')
+    .to(revealLines,  { y: '0%', opacity: 1, duration: 1.4, stagger: 0.12, ease: 'power4.out' }, '-=1.5')
     .to(heroDesc,     { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }, '-=1.2')
     .to(heroCtaGroup, { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }, '-=1.0')
     .to(navbar, { y: 0, opacity: 1, duration: 2.0, ease: 'power4.out' }, '-=1.2')
