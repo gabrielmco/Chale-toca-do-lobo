@@ -59,6 +59,7 @@ export function initNavbarScroll() {
   };
 
   const hideNavbar = () => {
+    if (window.innerWidth <= 1024) return; // Navbar stays permanently visible on mobile
     if (navState === 'hidden') return;
     navState = 'hidden';
     navbar.classList.add('nav-hidden');

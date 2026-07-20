@@ -136,6 +136,7 @@ export function initHeroParallax() {
   const heroContent = document.querySelector('.hero-content');
 
   if (!heroSection || !heroBg) return;
+  if (window.innerWidth <= 1024) return; // Skip CPU/GPU scrub overhead on mobile
 
   gsap.to(heroBg, {
     scrollTrigger: {

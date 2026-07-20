@@ -824,14 +824,13 @@ function buildChaleResponsiveTimeline({
   const headTrigger = gsap.timeline({
     scrollTrigger: {
       trigger: titleWrapper || chaleSection,
-      start: "top 90%",
-      end: "top 50%",
-      scrub: 0.8,
+      start: "top 88%",
+      once: true,
       invalidateOnRefresh: true
     }
   })
-  .to(supraText, { y: 0, opacity: 0.65, duration: 0.3 }, 0)
-  .to(headingWords, { yPercent: 0, opacity: 1, stagger: 0.07, duration: 0.6 }, 0.05);
+  .to(supraText, { y: 0, opacity: 0.65, duration: 0.5, ease: "power2.out" }, 0)
+  .to(headingWords, { yPercent: 0, opacity: 1, stagger: 0.07, duration: 0.6, ease: "power2.out" }, 0.05);
   localTriggers.push(headTrigger.scrollTrigger);
 
   // 2. Reveal do Subtexto de Descrição
@@ -839,13 +838,12 @@ function buildChaleResponsiveTimeline({
     const subTextTrigger = gsap.timeline({
       scrollTrigger: {
         trigger: subWrapper || subText,
-        start: "top 92%",
-        end: "top 62%",
-        scrub: 0.8,
+        start: "top 90%",
+        once: true,
         invalidateOnRefresh: true
       }
     })
-    .to(subText, { y: 0, opacity: 0.86, duration: 0.6 });
+    .to(subText, { y: 0, opacity: 0.86, duration: 0.6, ease: "power2.out" });
     localTriggers.push(subTextTrigger.scrollTrigger);
   }
 
@@ -854,14 +852,13 @@ function buildChaleResponsiveTimeline({
     const commoditiesTrigger = gsap.timeline({
       scrollTrigger: {
         trigger: headerRight || pillsSubText,
-        start: "top 92%",
-        end: "top 62%",
-        scrub: 0.8,
+        start: "top 90%",
+        once: true,
         invalidateOnRefresh: true
       }
     })
-    .to(pillsSubText, { y: 0, opacity: 0.72, duration: 0.35 }, 0)
-    .to(pills, { y: 0, opacity: 1, scale: 1, stagger: 0.05, duration: 0.65 }, 0.08);
+    .to(pillsSubText, { y: 0, opacity: 0.72, duration: 0.4, ease: "power2.out" }, 0)
+    .to(pills, { y: 0, opacity: 1, scale: 1, stagger: 0.05, duration: 0.6, ease: "power2.out" }, 0.08);
     localTriggers.push(commoditiesTrigger.scrollTrigger);
   }
 
@@ -870,13 +867,12 @@ function buildChaleResponsiveTimeline({
     const galleryControlsTrigger = gsap.timeline({
       scrollTrigger: {
         trigger: chaleSection.querySelector(".chale-gallery-viewport") || hint || controls,
-        start: "top 94%",
-        end: "top 74%",
-        scrub: 0.8,
+        start: "top 92%",
+        once: true,
         invalidateOnRefresh: true
       }
     })
-    .to([hint, controls].filter(Boolean), { y: 0, opacity: 1, stagger: 0.05, duration: 0.5 });
+    .to([hint, controls].filter(Boolean), { y: 0, opacity: 1, stagger: 0.05, duration: 0.5, ease: "power2.out" });
     localTriggers.push(galleryControlsTrigger.scrollTrigger);
   }
 

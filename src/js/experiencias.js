@@ -1416,9 +1416,8 @@ function initExperienciasReveal(accordion, prefersReducedMotion) {
     gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: "top 95%",
-        end: "top 55%",
-        scrub: 0.8,
+        start: "top 88%",
+        once: true,
         invalidateOnRefresh: true,
         refreshPriority: -45
       }
@@ -1441,9 +1440,8 @@ function initExperienciasReveal(accordion, prefersReducedMotion) {
       gsap.timeline({
         scrollTrigger: {
           trigger: accordionEl,
-          start: "top 92%",
-          end: "top 62%",
-          scrub: 0.8,
+          start: "top 90%",
+          once: true,
           invalidateOnRefresh: true
         }
       })
