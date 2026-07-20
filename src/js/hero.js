@@ -16,6 +16,9 @@ export function initLoaderAndEntrance() {
 
   if (!loader) return;
 
+  // Trava o scroll enquanto a animação do loader/hero acontece
+  document.body.style.overflow = 'hidden';
+
   // Generate loader firefly particles
   const loaderParticlesContainer = loader.querySelector('.loader-particles-container');
   const loaderParticles = [];
@@ -127,7 +130,8 @@ function triggerHeroEntrance() {
     .to(revealLines,  { y: 0, duration: 1.6, stagger: 0.15, ease: 'power4.out' }, '-=1.5')
     .to(heroDesc,     { y: 0, duration: 1.2, ease: 'power3.out' }, '-=1.2')
     .to(heroCtaGroup, { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }, '-=1.0')
-    .to(navbar, { y: 0, opacity: 1, duration: 2.0, ease: 'power4.out' }, '-=1.2');
+    .to(navbar, { y: 0, opacity: 1, duration: 2.0, ease: 'power4.out' }, '-=1.2')
+    .call(() => { document.body.style.overflow = ''; }, null, '+=0'); // Libera o scroll após a hero
 }
 
 export function initHeroParallax() {

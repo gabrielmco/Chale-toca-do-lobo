@@ -190,6 +190,18 @@ function initResponsiveVideoCarousel(section, cards) {
 
   // Initial call
   updateDots();
+
+  // Scroll inicial para o vídeo do meio (índice 1) no mobile
+  if (realCards.length >= 3) {
+    // Usar um requestAnimationFrame/setTimeout para garantir que o layout esteja pronto
+    requestAnimationFrame(() => {
+      carousel.scrollTo({
+        left: getCardLeft(realCards[1]),
+        behavior: 'instant'
+      });
+      updateDots();
+    });
+  }
 }
 
 function initVideoLogoReveal(section, prefersReducedMotion, isResponsiveLayout = false) {
