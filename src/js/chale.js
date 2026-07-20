@@ -718,6 +718,7 @@ function buildChaleTimeline({ chaleSection, textBlock, subText, track }) {
   const bottomRow = rows[1];
 
   if (topRow) {
+    gsap.set(topRow, { x: () => -getRowDistance(topRow) });
     chaleTimeline.fromTo(topRow, {
       x: () => -getRowDistance(topRow)
     }, {
@@ -728,6 +729,7 @@ function buildChaleTimeline({ chaleSection, textBlock, subText, track }) {
   }
 
   if (bottomRow) {
+    gsap.set(bottomRow, { x: 0 });
     chaleTimeline.to(bottomRow, {
       x: () => -getRowDistance(bottomRow),
       ease: "none",
