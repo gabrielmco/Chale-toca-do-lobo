@@ -204,11 +204,20 @@
 
   .map-label {
     left: 0.85rem;
-    right: 0.85rem;
-    top: auto;
-    bottom: 0.85rem;
+    right: auto;
+    top: 0.85rem;
+    bottom: auto;
+    max-width: calc(100% - 6.2rem);
     min-width: 0;
-    padding: 0.9rem 1.1rem;
+    padding: 0.75rem 1rem;
+
+    strong {
+      font-size: 0.8rem;
+    }
+
+    small {
+      font-size: 0.58rem;
+    }
   }
 
   .map-open-label {

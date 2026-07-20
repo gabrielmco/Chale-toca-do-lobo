@@ -54,6 +54,17 @@
       rgba(0, 0, 0, 0.92) 100%
     );
     z-index: 2;
+
+    @media (max-width: 1024px) {
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.82) 0%,
+        rgba(0, 0, 0, 0.62) 40%,
+        rgba(0, 0, 0, 0.96) 100%
+      );
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
   }
 
   .hero-container {
@@ -337,10 +348,53 @@
     }
   }
 
+  // Hero Pill CTA Button
+  .btn-hero-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    background-color: $warm-linen;
+    color: $moss-black;
+    font-family: $font-headings;
+    font-weight: 800;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.85rem 1.8rem;
+    border-radius: 60px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+    transition: transform 0.35s $ease-buttery, background-color 0.35s ease, box-shadow 0.35s ease;
+    text-decoration: none;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.35s $ease-buttery;
+    }
+
+    &:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.38);
+      background-color: #fff6d6;
+
+      svg {
+        transform: translateX(4px);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      width: 100%;
+      padding: 0.95rem 1.5rem;
+      font-size: 0.82rem;
+      margin-top: 0.25rem;
+    }
+  }
+
   @media (max-width: 420px) {
     .hero-container {
-      padding-top: clamp(6.4rem, 14dvh, 7.4rem);
-      padding-bottom: 1.25rem;
+      padding-top: clamp(5.8rem, 12dvh, 6.8rem);
+      padding-bottom: clamp(2.8rem, 6vh, 4rem);
     }
 
     .hero-badge-wrapper {
