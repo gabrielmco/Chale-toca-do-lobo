@@ -73,8 +73,14 @@ export function initVideoTriptych() {
     entries.forEach((entry) => {
       const video = entry.target;
       if (entry.isIntersecting) {
-        if (video.paused) {
-          video.play().catch(() => {});
+        video.muted = true;
+        video.playsInline = true;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            video.muted = true;
+            video.play().catch(() => {});
+          });
         }
       } else {
         if (!video.paused) {
@@ -88,6 +94,8 @@ export function initVideoTriptych() {
   });
 
   section.querySelectorAll('video').forEach((video) => {
+    video.muted = true;
+    video.playsInline = true;
     videoObserver.observe(video);
   });
 }

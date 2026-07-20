@@ -19,6 +19,10 @@
     height: auto;
     min-height: 100svh;
     align-items: stretch;
+
+    .hero-bg-container {
+      height: 100%;
+    }
   }
 
   .hero-bg-container {
