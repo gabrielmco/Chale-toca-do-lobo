@@ -56,10 +56,10 @@
   max-width: 1040px;
   margin: 0;
   font-family: $font-headings;
-  font-size: clamp(1.9rem, 3.5vw, 4.2rem);
+  font-size: clamp(2.0rem, 3.4vw, 3.8rem);
   font-weight: 800;
-  line-height: 1.12;
-  letter-spacing: 0;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
   padding-top: 0.12em;
 
@@ -69,8 +69,8 @@
   }
 
   @media (max-width: 1024px) {
-    font-size: clamp(1.15rem, 4.4vw, 1.82rem);
-    line-height: 1.15;
+    font-size: clamp(1.28rem, 5.0vw, 2.1rem);
+    line-height: 1.12;
   }
 }
 
