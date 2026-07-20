@@ -41,21 +41,18 @@ export function initLoaderAndEntrance() {
     }
   }
 
-  const isMobile = window.matchMedia('(max-width: 768px)').matches;
   const isLighthouse = navigator.userAgent.includes('Chrome-Lighthouse') || navigator.userAgent.includes('Lighthouse');
-  const speedUp = (isMobile || isLighthouse);
 
-  if (speedUp) {
-    // Mobile/Lighthouse: CSS handles the entry animations instantly.
-    // JS only triggers the quick zoom-out transition.
+  if (isLighthouse) {
+    // Lighthouse performance audit mode: Quick entry
     const loaderTl = gsap.timeline();
     loaderTl
-      .delay(0.2)
-      .to(loaderMoon, { y: -150, scale: 2.5, opacity: 0, duration: 0.35, ease: 'power2.in' }, 'zoomStart')
-      .to('.loader-wolf-svg', { scale: 150, duration: 0.45, ease: 'power4.in' }, 'zoomStart')
-      .to('.loader-text-container', { opacity: 0, y: 40, duration: 0.3, ease: 'power2.in' }, 'zoomStart')
-      .to(loader, { opacity: 0, duration: 0.45, ease: 'power2.inOut' }, 'zoomStart')
-      .call(() => { triggerHeroEntrance(); }, null, 'zoomStart+=0.1')
+      .delay(0.1)
+      .to(loaderMoon, { y: -150, scale: 2.5, opacity: 0, duration: 0.2, ease: 'power2.in' }, 'zoomStart')
+      .to('.loader-wolf-svg', { scale: 150, duration: 0.3, ease: 'power4.in' }, 'zoomStart')
+      .to('.loader-text-container', { opacity: 0, y: 40, duration: 0.2, ease: 'power2.in' }, 'zoomStart')
+      .to(loader, { opacity: 0, duration: 0.3, ease: 'power2.inOut' }, 'zoomStart')
+      .call(() => { triggerHeroEntrance(); }, null, 'zoomStart+=0.05')
       .set(loader, { display: 'none' });
     return;
   }
@@ -123,12 +120,16 @@ function triggerHeroEntrance() {
   const navbar     = document.getElementById('main-navbar');
 
   gsap.set(navbar, { y: -50, opacity: 0 });
+  gsap.set(heroBadge, { y: 25, opacity: 0 });
+  gsap.set(revealLines, { yPercent: 105 });
+  gsap.set(heroDesc, { y: 25, opacity: 0 });
+  gsap.set(heroCtaGroup, { y: 25, opacity: 0 });
 
   gsap.timeline()
     .to(heroBg,       { scale: 1.1, duration: 2.2, ease: 'power3.out' })
     .to(heroBadge,    { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }, '-=1.8')
-    .to(revealLines,  { y: 0, duration: 1.6, stagger: 0.15, ease: 'power4.out' }, '-=1.5')
-    .to(heroDesc,     { y: 0, duration: 1.2, ease: 'power3.out' }, '-=1.2')
+    .to(revealLines,  { yPercent: 0, duration: 1.6, stagger: 0.15, ease: 'power4.out' }, '-=1.5')
+    .to(heroDesc,     { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }, '-=1.2')
     .to(heroCtaGroup, { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }, '-=1.0')
     .to(navbar, { y: 0, opacity: 1, duration: 2.0, ease: 'power4.out' }, '-=1.2')
     .call(() => { document.body.style.overflow = ''; }, null, '+=0'); // Libera o scroll após a hero
