@@ -759,25 +759,30 @@ function buildChaleTimeline({ chaleSection, textBlock, subText, track }) {
     }, scrollDistance * 0.035);
   }
 
+  const getTrackYStart = () => {
+    const header = chaleSection.querySelector(".chale-header");
+    if (!header) return 0;
+    const headerBottom = header.offsetTop + header.offsetHeight;
+    const trackHeight = track.offsetHeight;
+    
+    // Calcula o bottomSpacing correspondente a clamp(1.2rem, 2.5vh, 2.5rem)
+    const vh2_5 = window.innerHeight * 0.025;
+    const rem1_2 = parseFloat(getComputedStyle(document.documentElement).fontSize) * 1.2;
+    const rem2_5 = parseFloat(getComputedStyle(document.documentElement).fontSize) * 2.5;
+    const bottomSpacing = Math.min(Math.max(rem1_2, vh2_5), rem2_5);
+    
+    const defaultTop = window.innerHeight - bottomSpacing - trackHeight;
+    const targetTop = headerBottom + Math.min(window.innerHeight * 0.02, 24);
+    const yStart = targetTop - defaultTop;
+    return yStart < 0 ? 0 : yStart;
+  };
+
+  // Pre-set initial y on track so there is no layout jump when entering section
+  gsap.set(track, { y: getTrackYStart });
+
   // Centraliza o track da galeria na tela cheia à medida que o cabeçalho desaparece
   chaleTimeline.fromTo(track, {
-    y: () => {
-      const header = chaleSection.querySelector(".chale-header");
-      if (!header) return 0;
-      const headerBottom = header.offsetTop + header.offsetHeight;
-      const trackHeight = track.offsetHeight;
-      
-      // Calcula o bottomSpacing correspondente a clamp(1.2rem, 2.5vh, 2.5rem)
-      const vh2_5 = window.innerHeight * 0.025;
-      const rem1_2 = parseFloat(getComputedStyle(document.documentElement).fontSize) * 1.2;
-      const rem2_5 = parseFloat(getComputedStyle(document.documentElement).fontSize) * 2.5;
-      const bottomSpacing = Math.min(Math.max(rem1_2, vh2_5), rem2_5);
-      
-      const defaultTop = window.innerHeight - bottomSpacing - trackHeight;
-      const targetTop = headerBottom + Math.min(window.innerHeight * 0.02, 24);
-      const yStart = targetTop - defaultTop;
-      return yStart < 0 ? 0 : yStart;
-    }
+    y: getTrackYStart
   }, {
     y: 0,
     ease: "power2.inOut",
