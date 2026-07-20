@@ -117,7 +117,8 @@ export function initReservationReveal() {
       trigger: section,
       start: 'top 95%',
       end: 'bottom 90%',
-      scrub: 1.0,
+      scrub: window.innerWidth <= 1024 ? false : 1.0,
+      once: window.innerWidth <= 1024,
       invalidateOnRefresh: true,
       refreshPriority: -150
     }

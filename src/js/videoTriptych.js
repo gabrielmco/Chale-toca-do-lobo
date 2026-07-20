@@ -281,7 +281,8 @@ function initVideoLogoReveal(section, prefersReducedMotion, isResponsiveLayout =
       trigger: isResponsiveLayout ? section : container.parentElement || container,
       start: isResponsiveLayout ? 'top 82%' : 'top 65%',
       end: isResponsiveLayout ? 'top 34%' : 'bottom 15%',
-      scrub: isResponsiveLayout ? 0.7 : 1.0,
+      scrub: isResponsiveLayout ? false : 1.0,
+      once: isResponsiveLayout,
       invalidateOnRefresh: true
     }
   });
