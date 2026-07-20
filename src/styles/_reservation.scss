@@ -336,6 +336,8 @@
 
 @media (max-width: 1024px) {
   .reserve-section {
+    position: relative;
+    z-index: 2;
     min-height: auto;
     overflow: hidden;
   }

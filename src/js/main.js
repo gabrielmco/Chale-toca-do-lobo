@@ -113,7 +113,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Resolver o travamento do scroll (Lenis) ao passar o mouse em cima do mapa
+// Resolver o travamento do scroll ao passar o toque/mouse em cima do mapa
 function initMapInteraction() {
   const mapFrame = document.querySelector('.location-map-frame');
   if (!mapFrame) return;
@@ -125,4 +125,17 @@ function initMapInteraction() {
   mapFrame.addEventListener('mouseleave', () => {
     mapFrame.classList.remove('is-active');
   });
+
+  // Desativar a captura de toque no iframe assim que o usuário rolar a página ou tocar fora
+  window.addEventListener('scroll', () => {
+    if (mapFrame.classList.contains('is-active')) {
+      mapFrame.classList.remove('is-active');
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchstart', (e) => {
+    if (mapFrame.classList.contains('is-active') && !mapFrame.contains(e.target)) {
+      mapFrame.classList.remove('is-active');
+    }
+  }, { passive: true });
 }

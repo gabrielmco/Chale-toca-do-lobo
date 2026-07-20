@@ -83,8 +83,8 @@ export function initVideoTriptych() {
       }
     });
   }, {
-    rootMargin: '120px',
-    threshold: 0.02
+    rootMargin: '350px 0px 350px 0px',
+    threshold: 0.01
   });
 
   section.querySelectorAll('video').forEach((video) => {

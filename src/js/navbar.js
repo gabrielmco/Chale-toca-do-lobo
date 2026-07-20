@@ -172,7 +172,10 @@ export function initNavbarScroll() {
   }
 
   syncLogoPosition();
+  let lastWidth = window.innerWidth;
   window.addEventListener('resize', () => {
+    if (window.innerWidth === lastWidth) return; // Ignore height-only resizes from mobile address bar toggle
+    lastWidth = window.innerWidth;
     requestAnimationFrame(() => {
       syncLogoPosition();
       applyScrollState(window.scrollY, 0);
@@ -186,7 +189,7 @@ export function initNavbarScroll() {
 }
 
 function initScrollSpy() {
-  const sections = [
+  const sectionsConfig = [
     { id: '#hero', linkSelector: 'a[href="#hero"]' },
     { id: '#chale-section', linkSelector: 'a[href="#chale-section"]' },
     { id: '#video-triptych', linkSelector: 'a[href="#video-triptych"]' },
@@ -194,11 +197,14 @@ function initScrollSpy() {
     { id: '#reservar', linkSelector: 'a[href="#reservar"]' }
   ];
 
+  let isTicking = false;
+
   const updateActiveLink = () => {
+    isTicking = false;
     const scrollPos = window.scrollY + window.innerHeight * 0.38;
     let activeId = '#hero';
 
-    sections.forEach(({ id }) => {
+    sectionsConfig.forEach(({ id }) => {
       const el = document.querySelector(id);
       if (el) {
         const pinSpacer = el.closest('.pin-spacer');
@@ -211,7 +217,7 @@ function initScrollSpy() {
       }
     });
 
-    sections.forEach(({ id, linkSelector }) => {
+    sectionsConfig.forEach(({ id, linkSelector }) => {
       const links = document.querySelectorAll(linkSelector);
       links.forEach(link => {
         if (link.classList.contains('menu-item') || link.classList.contains('mobile-menu-item')) {
@@ -221,7 +227,14 @@ function initScrollSpy() {
     });
   };
 
-  window.addEventListener('scroll', updateActiveLink, { passive: true });
+  const onScroll = () => {
+    if (!isTicking) {
+      isTicking = true;
+      requestAnimationFrame(updateActiveLink);
+    }
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
   ScrollTrigger.addEventListener('refresh', updateActiveLink);
   updateActiveLink();
 }
