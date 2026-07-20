@@ -695,6 +695,8 @@ function buildChaleTimeline({ chaleSection, textBlock, subText, track }) {
     0.1
   );
 
+  gsap.set(rows, { autoAlpha: 1 });
+
   // 2. Criar depois o timeline pinado
   const chaleTimeline = gsap.timeline({
     scrollTrigger: {
