@@ -29,6 +29,14 @@
     border-bottom: 1px solid rgba($warm-linen, 0.05);
   }
 
+  @media (max-width: 1024px) {
+    padding: 1rem 0;
+    background-color: rgba($neutral-dark, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba($warm-linen, 0.08);
+  }
+
   .navbar-container {
     --nav-logo-left: 50%;
     position: relative;

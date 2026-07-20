@@ -8,6 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 // Registrar plugins GSAP globalmente
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 // Módulos Críticos (carregados estaticamente)
 import { initSmoothScroll }           from './smoothScroll.js';

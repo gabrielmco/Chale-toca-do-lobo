@@ -149,7 +149,10 @@ export function initChale() {
   if (resizeRefreshHandler) {
     window.removeEventListener("resize", resizeRefreshHandler);
   }
+  let lastWidth = window.innerWidth;
   resizeRefreshHandler = () => {
+    if (window.innerWidth === lastWidth) return; // Ignora resizes verticais da barra de URL do mobile
+    lastWidth = window.innerWidth;
     window.clearTimeout(resizeRefreshTimer);
     resizeRefreshTimer = window.setTimeout(() => {
       ScrollTrigger.sort();

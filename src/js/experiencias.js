@@ -498,7 +498,10 @@ export function initExperiencias() {
     initExperienciasReveal(accordion, prefersReducedMotion);
     syncResponsivePanelHeights(accordion);
     updatePanelInteractivity();
+    let lastExpWidth = window.innerWidth;
     window.addEventListener("resize", () => {
+      if (window.innerWidth === lastExpWidth) return;
+      lastExpWidth = window.innerWidth;
       requestAnimationFrame(() => {
         syncResponsivePanelHeights(accordion);
         updatePanelInteractivity();

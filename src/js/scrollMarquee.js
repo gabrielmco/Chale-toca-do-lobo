@@ -143,7 +143,10 @@ function initMarqueeStage(stage) {
     }
   }
 
+  let lastMarqueeWidth = window.innerWidth;
   window.addEventListener('resize', () => {
+    if (window.innerWidth === lastMarqueeWidth) return;
+    lastMarqueeWidth = window.innerWidth;
     requestAnimationFrame(syncMetrics);
   }, { passive: true });
 

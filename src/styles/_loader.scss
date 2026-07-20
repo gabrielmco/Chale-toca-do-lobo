@@ -7,7 +7,7 @@
   position: fixed;
   inset: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100svh;
   background: linear-gradient(140deg, rgba($moss-black, 0.98), rgba($neutral-dark, 0.92)), $moss-black;
   display: flex;
   align-items: center;
@@ -101,7 +101,7 @@
     position: absolute;
     inset: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100svh;
     pointer-events: none;
     overflow: hidden;
     z-index: 1;
