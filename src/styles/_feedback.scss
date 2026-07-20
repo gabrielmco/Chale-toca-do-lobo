@@ -69,8 +69,14 @@
   }
 
   @media (max-width: 1024px) {
-    font-size: clamp(1.28rem, 5.0vw, 2.1rem);
-    line-height: 1.12;
+    font-size: clamp(1.15rem, 4.6vw, 1.85rem);
+    line-height: 1.15;
+    text-wrap: balance;
+
+    .feedback-title-line {
+      display: inline;
+      white-space: normal;
+    }
   }
 }
 
