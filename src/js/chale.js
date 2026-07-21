@@ -36,7 +36,7 @@ const GALLERY_ITEMS = [
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_7.webp", label: "Sala de estar do segundo andar" },
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_8.webp", label: "Sala de estar com acesso ao mezanino" },
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_9.webp", label: "Suíte do segundo andar com cama de casal" },
-  { src: "/imgs-videos/externa/hero_chale_paisagem_16-9.webp", label: "Vista da Serra de Ibitipoca" }
+  { src: "/imgs-videos/externa/hero_chale_paisagem_16-9.webp", label: "Fachada da casa" }
 ];
 
 const GALLERY_ROWS = [
