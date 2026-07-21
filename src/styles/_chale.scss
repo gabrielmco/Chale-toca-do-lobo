@@ -114,7 +114,7 @@
 .chale-heading-line span {
   display: inline-block;
   font-family: $font-headings;
-  font-size: clamp(2.3rem, 3.55vw, 3.55rem);
+  font-size: clamp(2.6rem, 4.1vw, 4.1rem);
   font-weight: 800;
   line-height: 1.15; // Aumentado ligeiramente para evitar corte
   letter-spacing: 0;
@@ -643,8 +643,31 @@ body.gallery-lightbox-open {
     align-items: stretch;
   }
 
-  .chale-heading-line span {
-    white-space: nowrap;
+  .chale-header-left,
+  .chale-title-wrapper,
+  .chale-text-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+
+  .chale-supra,
+  .chale-sub {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .chale-heading-line {
+    text-align: center;
+    width: 100%;
+
+    span {
+      white-space: nowrap;
+      font-size: clamp(1.68rem, 7.3vw, 2.35rem);
+    }
   }
 
   .chale-header-right {

@@ -58,19 +58,25 @@
   font-family: $font-headings;
   font-size: clamp(2.0rem, 3.4vw, 3.8rem);
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1.2;
   letter-spacing: -0.01em;
   text-transform: uppercase;
-  padding-top: 0.12em;
+  padding-top: 0.28em;
+  overflow: visible;
+
+  div {
+    overflow: visible !important;
+  }
 
   .feedback-title-line {
     display: block;
     white-space: nowrap;
+    overflow: visible;
   }
 
   @media (max-width: 1024px) {
     font-size: clamp(1.15rem, 4.6vw, 1.85rem);
-    line-height: 1.15;
+    line-height: 1.18;
     text-wrap: balance;
 
     .feedback-title-line {
@@ -82,8 +88,10 @@
 
 .feedback-title-word {
   display: inline-block;
-  padding-top: 0.12em;
-  margin-top: -0.12em;
+  padding-top: 0.28em;
+  margin-top: -0.28em;
+  padding-bottom: 0.08em;
+  overflow: visible !important;
   will-change: transform;
 }
 
@@ -94,7 +102,7 @@
 }
 
 .feedback-sub {
-  max-width: 50ch;
+  max-width: 44ch;
   margin: 0 0 0.35rem;
   color: rgba($moss-black, 0.72);
   font-family: $font-body;
