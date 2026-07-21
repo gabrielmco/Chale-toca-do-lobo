@@ -521,6 +521,11 @@
   color: $warm-linen;
   text-decoration: none;
   white-space: nowrap;
+
+  .footer-brand-line {
+    display: inline;
+    white-space: nowrap;
+  }
 }
 
 .footer-brand-char {
@@ -723,6 +728,13 @@
 
   .site-footer-brand {
     font-size: clamp(2rem, 14vw, 3.35rem);
+    white-space: normal;
+    line-height: 0.98;
+
+    .footer-brand-line {
+      display: block;
+      white-space: nowrap;
+    }
   }
 
   .site-footer-main p {
