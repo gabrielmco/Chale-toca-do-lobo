@@ -24,45 +24,68 @@ export function initReservationReveal() {
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isResponsiveLayout = window.matchMedia('(max-width: 1024px)').matches;
-  const bg = section.querySelector('.reserve-bg');
-  const shade = section.querySelector('.reserve-shade');
-  const copyItems = Array.from(section.querySelectorAll(
-    '.reserve-kicker, .reserve-copy > p, .reserve-direct-card'
-  ));
+  const kicker = section.querySelector('.reserve-kicker');
   const title = section.querySelector('.reserve-copy h2');
-  const isCompactLayout = isResponsiveLayout;
-  const titleSplit = title && !isCompactLayout ? SplitText.create(title, {
-    type: 'lines',
-    mask: 'lines',
-    aria: 'auto'
-  }) : null;
-  if (title) title.removeAttribute('aria-label');
-  const titleItems = titleSplit ? titleSplit.lines : title ? [title] : [];
+  const sub = section.querySelector('.reserve-copy > p');
+  const directCard = section.querySelector('.reserve-direct-card');
   const form = section.querySelector('.reserve-form');
   const formItems = form ? Array.from(form.querySelectorAll(
     '.reserve-form-kicker, h3, .reserve-form > p, .reserve-fields label, .reserve-submit, .reserve-safe-note'
   )) : [];
-  const allItems = [...copyItems, ...titleItems, form, ...formItems].filter(Boolean);
+
+  const kickerSplit = kicker ? SplitText.create(kicker, {
+    type: 'words',
+    mask: 'words',
+    wordsClass: 'reserve-kicker-word'
+  }) : null;
+
+  const titleSplit = title ? SplitText.create(title, {
+    type: 'words',
+    mask: 'words',
+    wordsClass: 'reserve-title-word'
+  }) : null;
+
+  const subSplit = sub ? SplitText.create(sub, {
+    type: 'words',
+    mask: 'words',
+    wordsClass: 'reserve-sub-word'
+  }) : null;
+
+  if (kicker) kicker.removeAttribute('aria-label');
+  if (title) title.removeAttribute('aria-label');
+  if (sub) sub.removeAttribute('aria-label');
+
+  const kickerWords = kickerSplit ? kickerSplit.words : kicker ? [kicker] : [];
+  const titleWords = titleSplit ? titleSplit.words : title ? [title] : [];
+  const subWords = subSplit ? subSplit.words : sub ? [sub] : [];
+  const waveWords = [...kickerWords, ...titleWords, ...subWords].filter(Boolean);
+  const allItems = [...waveWords, directCard, form, ...formItems].filter(Boolean);
 
   if (!allItems.length) return;
 
   if (prefersReducedMotion) {
-    gsap.set(allItems, { clearProps: 'opacity,visibility,transform,clipPath,willChange' });
+    gsap.set(allItems, { clearProps: 'opacity,visibility,transform,willChange' });
     return;
   }
 
   // Initialize springy tactile hovers
   initWhatsAppSpringyHovers(section);
 
+  gsap.set(waveWords, {
+    y: 28,
+    autoAlpha: 0,
+    willChange: 'transform, opacity'
+  });
+
   if (isResponsiveLayout) {
-    gsap.set(bg, { scale: 1.06, autoAlpha: 0.72, willChange: 'transform, opacity' });
+    gsap.set(bg, { scale: 1.04, autoAlpha: 0.72, willChange: 'transform, opacity' });
     gsap.set(shade, { autoAlpha: 0.78, willChange: 'opacity' });
-    gsap.set(allItems, { y: 26, autoAlpha: 0, clipPath: 'inset(10% 0% 0% 0%)', willChange: 'transform, opacity, clip-path' });
+    gsap.set([directCard, form].filter(Boolean), { y: 28, autoAlpha: 0, willChange: 'transform, opacity' });
 
     gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: 'top 76%',
+        start: 'top 82%',
         once: true,
         invalidateOnRefresh: true
       },
@@ -70,29 +93,39 @@ export function initReservationReveal() {
     })
       .to(bg, { scale: 1, autoAlpha: 1, duration: 1.0 }, 0)
       .to(shade, { autoAlpha: 1, duration: 0.72 }, 0.04)
-      .to(titleItems, { y: 0, autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.74, stagger: 0.04 }, 0.12)
-      .to(copyItems, { y: 0, autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.68, stagger: 0.045 }, 0.2)
-      .to(form, { y: 0, autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.72 }, 0.34)
-      .to(formItems, { y: 0, autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.56, stagger: 0.025 }, 0.46)
-      .set([bg, shade, ...allItems].filter(Boolean), { clearProps: 'willChange' });
+      .to(waveWords, {
+        y: 0,
+        autoAlpha: 1,
+        duration: 0.65,
+        stagger: 0.025,
+        ease: 'power3.out'
+      }, 0.1)
+      .to([directCard, form].filter(Boolean), {
+        y: 0,
+        autoAlpha: 1,
+        duration: 0.72,
+        stagger: 0.12,
+        ease: 'power3.out'
+      }, 0.32)
+      .set([bg, shade, ...waveWords, directCard, form].filter(Boolean), { clearProps: 'willChange' });
     return;
   }
 
-  gsap.set([copyItems[0], ...titleItems].filter(Boolean), {
-    x: -18,
-    y: 58,
+  gsap.set(waveWords, {
+    x: -12,
+    y: 36,
     autoAlpha: 0,
-    clipPath: 'inset(12% 0% 0% 0%)',
-    willChange: 'transform, opacity, clip-path'
+    willChange: 'transform, opacity'
   });
 
-  gsap.set(copyItems.slice(1), {
-    x: -12,
-    y: 44,
-    autoAlpha: 0,
-    clipPath: 'inset(10% 0% 0% 0%)',
-    willChange: 'transform, opacity, clip-path'
-  });
+  if (directCard) {
+    gsap.set(directCard, {
+      x: -12,
+      y: 28,
+      autoAlpha: 0,
+      willChange: 'transform, opacity'
+    });
+  }
 
   if (form) {
     gsap.set(form, {
@@ -107,8 +140,7 @@ export function initReservationReveal() {
     x: 10,
     y: 24,
     autoAlpha: 0,
-    clipPath: 'inset(8% 0% 0% 0%)',
-    willChange: 'transform, opacity, clip-path'
+    willChange: 'transform, opacity'
   });
 
   gsap.timeline({
@@ -117,42 +149,38 @@ export function initReservationReveal() {
       trigger: section,
       start: 'top 95%',
       end: 'bottom 90%',
-      scrub: window.innerWidth <= 1024 ? false : 1.0,
-      once: window.innerWidth <= 1024,
+      scrub: 1.0,
       invalidateOnRefresh: true,
       refreshPriority: -150
     }
   })
-    .to(form, {
+    .to(waveWords, {
+      x: 0,
+      y: 0,
+      autoAlpha: 1,
+      duration: 1.0,
+      stagger: 0.025
+    }, 0)
+    .to(directCard, {
       x: 0,
       y: 0,
       autoAlpha: 1,
       duration: 0.8
-    }, 0)
-    .to([copyItems[0], ...titleItems].filter(Boolean), {
+    }, 0.3)
+    .to(form, {
       x: 0,
       y: 0,
       autoAlpha: 1,
-      clipPath: 'inset(0% 0% 0% 0%)',
-      duration: 1.0,
-      stagger: 0.08
-    }, 0.25)
-    .to(copyItems.slice(1), {
-      x: 0,
-      y: 0,
-      autoAlpha: 1,
-      clipPath: 'inset(0% 0% 0% 0%)',
-      duration: 0.8,
-      stagger: 0.06
-    }, 0.455)
+      duration: 1.0
+    }, 0.1)
     .to(formItems, {
       x: 0,
       y: 0,
       autoAlpha: 1,
-      clipPath: 'inset(0% 0% 0% 0%)',
       duration: 0.8,
       stagger: 0.04
-    }, 0.55);
+    }, 0.3)
+    .set([bg, shade, ...waveWords, directCard, form, ...formItems].filter(Boolean), { clearProps: 'willChange' });
 }
 
 function initWhatsAppSpringyHovers(section) {
