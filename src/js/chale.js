@@ -28,13 +28,13 @@ const GALLERY_ITEMS = [
   { src: "/imgs-videos/melhoradas/novas/casa_nova_9.webp", label: "Cozinha da casa (itens de café da manhã não inclusos)" },
   { src: "/imgs-videos/melhoradas/novas/casa_nova_10.webp", label: "Ambiente com lareira" },
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251.webp", label: "Banheiro do segundo andar" },
-  { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_2.webp", label: "Quarto de casal no segundo andar" },
+  { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_2.webp", label: "Quarto no segundo andar" },
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_3.webp", label: "Quarto do primeiro andar" },
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_4.webp", label: "Cozinha equipada para uso dos hóspedes" },
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_5.webp", label: "Quarto no primeiro andar com cama de casal" },
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_6.webp", label: "Banheiro do primeiro andar" },
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_7.webp", label: "Sala de estar do segundo andar" },
-  { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_8.webp", label: "Sala com lareira no primeiro andar" },
+  { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_8.webp", label: "Sala de estar com acesso ao mezanino" },
   { src: "/imgs-videos/melhoradas/internas/wide/Espaço_Interno_--_Wide_--_202606021251_9.webp", label: "Suíte do segundo andar com cama de casal" },
   { src: "/imgs-videos/externa/hero_chale_paisagem_16-9.webp", label: "Vista da Serra de Ibitipoca" }
 ];
