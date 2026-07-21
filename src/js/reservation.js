@@ -72,42 +72,42 @@ export function initReservationReveal() {
   initWhatsAppSpringyHovers(section);
 
   gsap.set(waveWords, {
-    y: 28,
-    autoAlpha: 0,
+    y: 22,
+    opacity: 0,
     willChange: 'transform, opacity'
   });
 
   if (isResponsiveLayout) {
-    gsap.set(bg, { scale: 1.04, autoAlpha: 0.72, willChange: 'transform, opacity' });
-    gsap.set(shade, { autoAlpha: 0.78, willChange: 'opacity' });
-    gsap.set([directCard, form].filter(Boolean), { y: 28, autoAlpha: 0, willChange: 'transform, opacity' });
+    gsap.set(bg, { scale: 1.04, opacity: 0.72, willChange: 'transform, opacity' });
+    gsap.set(shade, { opacity: 0.78, willChange: 'opacity' });
+    gsap.set([directCard, form].filter(Boolean), { y: 22, opacity: 0, willChange: 'transform, opacity' });
 
     gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: 'top 82%',
+        start: 'top 96%',
         once: true,
         invalidateOnRefresh: true
       },
       defaults: { ease: 'power3.out' }
     })
-      .to(bg, { scale: 1, autoAlpha: 1, duration: 1.0 }, 0)
-      .to(shade, { autoAlpha: 1, duration: 0.72 }, 0.04)
+      .to(bg, { scale: 1, opacity: 1, duration: 0.8 }, 0)
+      .to(shade, { opacity: 1, duration: 0.6 }, 0.04)
       .to(waveWords, {
         y: 0,
-        autoAlpha: 1,
-        duration: 0.65,
-        stagger: 0.025,
+        opacity: 1,
+        duration: 0.6,
+        stagger: 0.02,
         ease: 'power3.out'
-      }, 0.1)
+      }, 0.08)
       .to([directCard, form].filter(Boolean), {
         y: 0,
-        autoAlpha: 1,
-        duration: 0.72,
-        stagger: 0.12,
+        opacity: 1,
+        duration: 0.65,
+        stagger: 0.1,
         ease: 'power3.out'
-      }, 0.32)
-      .set([bg, shade, ...waveWords, directCard, form].filter(Boolean), { clearProps: 'willChange' });
+      }, 0.28)
+      .set([bg, shade, ...waveWords, directCard, form].filter(Boolean), { clearProps: 'all' });
     return;
   }
 
