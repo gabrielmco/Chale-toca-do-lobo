@@ -24,6 +24,8 @@ export function initReservationReveal() {
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isResponsiveLayout = window.matchMedia('(max-width: 1024px)').matches;
+  const bg = section.querySelector('.reserve-bg');
+  const shade = section.querySelector('.reserve-shade');
   const kicker = section.querySelector('.reserve-kicker');
   const title = section.querySelector('.reserve-copy h2');
   const sub = section.querySelector('.reserve-copy > p');
@@ -71,42 +73,38 @@ export function initReservationReveal() {
   // Initialize springy tactile hovers
   initWhatsAppSpringyHovers(section);
 
-  gsap.set(waveWords, {
-    y: 22,
-    opacity: 0,
-    willChange: 'transform, opacity'
-  });
-
   if (isResponsiveLayout) {
-    gsap.set(bg, { scale: 1.04, opacity: 0.72, willChange: 'transform, opacity' });
-    gsap.set(shade, { opacity: 0.78, willChange: 'opacity' });
-    gsap.set([directCard, form].filter(Boolean), { y: 22, opacity: 0, willChange: 'transform, opacity' });
+    if (bg) gsap.set(bg, { scale: 1.04, opacity: 0.72 });
+    if (shade) gsap.set(shade, { opacity: 0.78 });
+    gsap.set(waveWords, { y: 22, opacity: 0 });
+    gsap.set([directCard, form].filter(Boolean), { y: 22, opacity: 0 });
 
-    gsap.timeline({
+    const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: 'top 96%',
+        start: 'top 95%',
         once: true,
         invalidateOnRefresh: true
       },
       defaults: { ease: 'power3.out' }
-    })
-      .to(bg, { scale: 1, opacity: 1, duration: 0.8 }, 0)
-      .to(shade, { opacity: 1, duration: 0.6 }, 0.04)
-      .to(waveWords, {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        stagger: 0.02,
-        ease: 'power3.out'
-      }, 0.08)
+    });
+
+    if (bg) tl.to(bg, { scale: 1, opacity: 1, duration: 0.8 }, 0);
+    if (shade) tl.to(shade, { opacity: 1, duration: 0.6 }, 0.04);
+    tl.to(waveWords, {
+      y: 0,
+      opacity: 1,
+      duration: 0.65,
+      stagger: 0.02,
+      ease: 'power3.out'
+    }, 0.08)
       .to([directCard, form].filter(Boolean), {
         y: 0,
         opacity: 1,
         duration: 0.65,
         stagger: 0.1,
         ease: 'power3.out'
-      }, 0.28)
+      }, 0.25)
       .set([bg, shade, ...waveWords, directCard, form].filter(Boolean), { clearProps: 'all' });
     return;
   }
