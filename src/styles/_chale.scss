@@ -6,9 +6,8 @@
 .chale-section {
   position: relative;
   background: linear-gradient(140deg, rgba($moss-black, 0.98), rgba($neutral-dark, 0.92)), $moss-black;
-  background-attachment: fixed;
   color: $warm-linen;
-  width: 100vw;
+  width: 100%;
   height: 100svh;
   box-sizing: border-box;
   overflow: hidden;
@@ -36,7 +35,7 @@
 
 .chale-header-grid {
   display: grid;
-  grid-template-columns: minmax(560px, 1.08fr) minmax(0, 0.92fr);
+  grid-template-columns: minmax(min(500px, 52%), 1.08fr) minmax(0, 0.92fr);
   gap: clamp(1.8rem, 3vw, 3.4rem);
   align-items: end;
 
@@ -253,7 +252,7 @@
 
 /* ─── Gallery Viewport ────────────────────────────────────────── */
 .chale-gallery-viewport {
-  width: 100vw;
+  width: 100%;
   height: 100svh;
   overflow: hidden;
   position: absolute;
@@ -290,7 +289,7 @@
 /* ─── Slide Card ──────────────────────────────────────────────── */
 .chale-slide {
   aspect-ratio: 1376 / 768;
-  height: clamp(300px, 44vh, 520px); // Tarde de cards aumentada para 44vh
+  height: clamp(220px, 37vh, 450px);
   width: auto;
   flex: 0 0 auto;
   overflow: hidden;

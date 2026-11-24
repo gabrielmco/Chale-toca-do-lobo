@@ -5,7 +5,6 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import Lenis from "lenis";
 import * as smoothScroll from "./smoothScroll.js";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -1098,34 +1097,42 @@ export function initExperiencias() {
     updateNextPointButton(dataId);
     updateDrawerScrollCue();
 
-    // Initialize local Lenis smooth scroll on drawer
+    // Initialize local Lenis smooth scroll on drawer (desktop only)
     const scrollContent = scrollArea ? scrollArea.querySelector(".drawer-scroll-content") : null;
-    if (scrollArea && scrollContent) {
+    if (scrollArea && scrollContent && !isResponsiveAccordion()) {
       if (window.drawerLenis) {
+        gsap.ticker.remove(window.drawerRaf);
         window.drawerLenis.destroy();
+        window.drawerLenis = null;
+        window.drawerRaf = null;
       }
-      window.drawerLenis = new Lenis({
-        wrapper: scrollArea,
-        content: scrollContent,
-        duration: 1.85,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: "vertical",
-        gestureOrientation: "vertical",
-        smoothWheel: true,
-        wheelMultiplier: 0.92,
-        touchMultiplier: 1.35,
-      });
+      import("lenis").then(({ default: Lenis }) => {
+        if (!sideDrawer.classList.contains("open") || isResponsiveAccordion()) return;
+        window.drawerLenis = new Lenis({
+          wrapper: scrollArea,
+          content: scrollContent,
+          duration: 1.85,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          orientation: "vertical",
+          gestureOrientation: "vertical",
+          smoothWheel: true,
+          wheelMultiplier: 0.92,
+          touchMultiplier: 1.35,
+        });
 
-      window.drawerLenis.on("scroll", () => {
-        updateDrawerScrollCue();
-      });
+        window.drawerLenis.on("scroll", () => {
+          updateDrawerScrollCue();
+        });
 
-      window.drawerRaf = (time) => {
-        if (window.drawerLenis) {
-          window.drawerLenis.raf(time * 1000);
-        }
-      };
-      gsap.ticker.add(window.drawerRaf);
+        window.drawerRaf = (time) => {
+          if (window.drawerLenis) {
+            window.drawerLenis.raf(time * 1000);
+          }
+        };
+        gsap.ticker.add(window.drawerRaf);
+      }).catch((err) => {
+        console.error("Error loading drawer Lenis:", err);
+      });
     }
 
     // Attach parallax mouse handlers on main image stage
@@ -1420,7 +1427,7 @@ function initExperienciasReveal(accordion, prefersReducedMotion) {
       scrollTrigger: {
         trigger: section,
         start: "top 88%",
-        once: true,
+        toggleActions: "play none none none",
         invalidateOnRefresh: true,
         refreshPriority: -45
       }
@@ -1444,7 +1451,7 @@ function initExperienciasReveal(accordion, prefersReducedMotion) {
         scrollTrigger: {
           trigger: accordionEl,
           start: "top 90%",
-          once: true,
+          toggleActions: "play none none none",
           invalidateOnRefresh: true
         }
       })

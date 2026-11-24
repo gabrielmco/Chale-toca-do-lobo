@@ -61,7 +61,8 @@ export function initVideoTriptych() {
         scrollTrigger: {
           trigger: section,
           start: 'top 68%',
-          once: true,
+          once: false,
+          toggleActions: 'play none none none',
           invalidateOnRefresh: true
         }
       }
@@ -282,7 +283,7 @@ function initVideoLogoReveal(section, prefersReducedMotion, isResponsiveLayout =
       start: isResponsiveLayout ? 'top 82%' : 'top 65%',
       end: isResponsiveLayout ? 'top 34%' : 'bottom 15%',
       scrub: isResponsiveLayout ? false : 1.0,
-      once: isResponsiveLayout,
+      toggleActions: 'play none none none',
       invalidateOnRefresh: true
     }
   });

@@ -9,7 +9,7 @@
   overflow: hidden;
   background: radial-gradient(circle at 50% 50%, #01312a 0%, #001210 80%), #001c18;
   color: $warm-linen;
-  width: 100vw;
+  width: 100%;
   padding: clamp(4.5rem, 8vh, 6rem) clamp(1.2rem, 3vw, 4rem);
   box-sizing: border-box;
   isolation: isolate; // Create a stacking context to keep particles behind cards but above background
@@ -132,8 +132,10 @@
 
 .video-card {
   position: relative;
+  width: 100%;
   aspect-ratio: 9 / 16;
-  min-height: min(66svh, 620px);
+  max-height: min(66svh, 620px);
+  min-height: 0;
   overflow: visible; // Permite que a sombra e a borda apareçam sem cortes
   background: rgba($warm-linen, 0.04);
   border: 0;
@@ -283,7 +285,8 @@
   position: relative;
   aspect-ratio: 9 / 16;
   width: 100%;
-  min-height: min(66svh, 620px);
+  max-height: min(66svh, 620px);
+  min-height: 0;
   background-color: transparent;
   border-radius: 0; // matching sharp corners of the video cards
   overflow: visible; // Permite que a silhueta com as patas sobreponha o card de vídeo vizinho
@@ -541,7 +544,7 @@
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    touch-action: pan-y;
+    touch-action: pan-x pan-y;
   }
 
   .video-triptych-grid::-webkit-scrollbar {

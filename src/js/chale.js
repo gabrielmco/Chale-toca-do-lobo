@@ -627,7 +627,8 @@ function buildChaleTimeline({ chaleSection, textBlock, subText, track }) {
       headerRight,
       pills,
       rows,
-      textBlock
+      textBlock,
+      isResponsiveLayout
     });
     return;
   }
@@ -748,9 +749,9 @@ function buildChaleTimeline({ chaleSection, textBlock, subText, track }) {
       y: -30,
       autoAlpha: 0,
       stagger: 0.02,
-      duration: scrollDistance * 0.06,
+      duration: scrollDistance * 0.055,
       ease: "power2.out"
-    }, scrollDistance * 0.045);
+    }, scrollDistance * 0.025);
   }
 
   // Fade out do título e supra-título (usando o wrapper de título para isolar do reveal)
@@ -759,9 +760,9 @@ function buildChaleTimeline({ chaleSection, textBlock, subText, track }) {
     chaleTimeline.to(titleWrapper, {
       y: -50,
       autoAlpha: 0,
-      duration: scrollDistance * 0.12,
+      duration: scrollDistance * 0.1,
       ease: "power2.inOut"
-    }, scrollDistance * 0.035);
+    }, scrollDistance * 0.025);
   }
 
   const getTrackYStart = () => {
@@ -779,7 +780,8 @@ function buildChaleTimeline({ chaleSection, textBlock, subText, track }) {
     const defaultTop = window.innerHeight - bottomSpacing - trackHeight;
     const targetTop = headerBottom + Math.min(window.innerHeight * 0.02, 24);
     const yStart = targetTop - defaultTop;
-    return yStart < 0 ? 0 : yStart;
+    const maxOffset = Math.max(0, window.innerHeight * 0.36);
+    return Math.min(Math.max(0, yStart), maxOffset);
   };
 
   // Pre-set initial y on track so there is no layout jump when entering section
@@ -791,8 +793,8 @@ function buildChaleTimeline({ chaleSection, textBlock, subText, track }) {
   }, {
     y: 0,
     ease: "power2.inOut",
-    duration: scrollDistance * 0.18
-  }, scrollDistance * 0.03);
+    duration: scrollDistance * 0.14
+  }, scrollDistance * 0.02);
 
   updateSlideParallax();
 }
@@ -807,7 +809,8 @@ function buildChaleResponsiveTimeline({
   headerRight,
   pills,
   rows,
-  textBlock
+  textBlock,
+  isResponsiveLayout = true
 }) {
   const headingWords = textBlock.querySelectorAll(".chale-heading-line > span");
   const hint = chaleSection.querySelector(".chale-carousel-hint");
@@ -828,7 +831,7 @@ function buildChaleResponsiveTimeline({
     scrollTrigger: {
       trigger: titleWrapper || chaleSection,
       start: "top 88%",
-      once: true,
+      toggleActions: "play none none none",
       invalidateOnRefresh: true
     }
   })
@@ -842,7 +845,7 @@ function buildChaleResponsiveTimeline({
       scrollTrigger: {
         trigger: subWrapper || subText,
         start: "top 90%",
-        once: true,
+        toggleActions: "play none none none",
         invalidateOnRefresh: true
       }
     })
@@ -856,7 +859,7 @@ function buildChaleResponsiveTimeline({
       scrollTrigger: {
         trigger: headerRight || pillsSubText,
         start: "top 90%",
-        once: true,
+        toggleActions: "play none none none",
         invalidateOnRefresh: true
       }
     })
@@ -871,7 +874,7 @@ function buildChaleResponsiveTimeline({
       scrollTrigger: {
         trigger: chaleSection.querySelector(".chale-gallery-viewport") || hint || controls,
         start: "top 92%",
-        once: true,
+        toggleActions: "play none none none",
         invalidateOnRefresh: true
       }
     })
@@ -893,7 +896,7 @@ function buildChaleResponsiveTimeline({
           scrollTrigger: {
             trigger: row,
             start: "top 92%",
-            once: true,
+            toggleActions: "play none none none",
             invalidateOnRefresh: true
           }
         }

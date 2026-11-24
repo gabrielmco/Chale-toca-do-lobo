@@ -13,11 +13,51 @@ export function initLoaderAndEntrance() {
   const loader = document.getElementById('loader');
   const loaderWolfFill = document.querySelector('.loader-wolf-fill');
   const loaderMoon = document.querySelector('.loader-moon-svg');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (!loader) return;
+  const revealHeroImmediate = () => {
+    const heroBg = document.getElementById('hero-bg');
+    const heroBadge = document.querySelector('.hero-badge');
+    const revealLines = document.querySelectorAll('.hero-title .reveal-line');
+    const heroDesc = document.querySelector('.hero-description');
+    const heroCtaGroup = document.querySelector('.hero-cta-group');
+    const navbar = document.getElementById('main-navbar');
 
-  // Trava o scroll enquanto a animação do loader/hero acontece
+    gsap.set(heroBg, { scale: 1.1 });
+    gsap.set([heroBadge, heroDesc, heroCtaGroup, navbar].filter(Boolean), { y: 0, opacity: 1 });
+    gsap.set(revealLines, { y: '0%', opacity: 1 });
+  };
+
+  if (!loader) {
+    document.body.style.overflow = '';
+    revealHeroImmediate();
+    return;
+  }
+
+  if (prefersReducedMotion) {
+    gsap.set(loader, { display: 'none', opacity: 0 });
+    document.body.style.overflow = '';
+    revealHeroImmediate();
+    return;
+  }
+
+  // Trava o scroll enquanto o loader roda, com failsafe para nunca travar permanentemente
   document.body.style.overflow = 'hidden';
+  let scrollUnlocked = false;
+  let failsafeTimer = null;
+  const unlockScroll = () => {
+    if (scrollUnlocked) return;
+    scrollUnlocked = true;
+    if (failsafeTimer) {
+      window.clearTimeout(failsafeTimer);
+      failsafeTimer = null;
+    }
+    document.body.style.overflow = '';
+  };
+  failsafeTimer = window.setTimeout(() => {
+    gsap.set(loader, { display: 'none', opacity: 0 });
+    unlockScroll();
+  }, 6500);
 
   // Generate loader firefly particles
   const loaderParticlesContainer = loader.querySelector('.loader-particles-container');
@@ -43,72 +83,92 @@ export function initLoaderAndEntrance() {
 
   const isLighthouse = navigator.userAgent.includes('Chrome-Lighthouse') || navigator.userAgent.includes('Lighthouse');
 
-  if (isLighthouse) {
-    // Lighthouse performance audit mode: Quick entry
+  const cleanupLoaderState = () => {
+    unlockScroll();
+    gsap.set('.loader-wolf-svg, .loader-moon-svg, .loader-text-container', { clearProps: 'willChange' });
+  };
+
+  try {
+    if (isLighthouse) {
+      // Lighthouse performance audit mode: Quick entry
+      const loaderTl = gsap.timeline();
+      loaderTl
+        .delay(0.1)
+        .to(loaderMoon, { y: -150, scale: 2.5, opacity: 0, duration: 0.2, ease: 'power2.in' }, 'zoomStart')
+        .to('.loader-wolf-svg', { scale: 14, opacity: 0, duration: 0.3, ease: 'power4.in' }, 'zoomStart')
+        .to('.loader-text-container', { opacity: 0, y: 40, duration: 0.2, ease: 'power2.in' }, 'zoomStart')
+        .to(loader, { opacity: 0, duration: 0.3, ease: 'power2.inOut' }, 'zoomStart')
+        .call(() => {
+          unlockScroll();
+          triggerHeroEntrance();
+        }, null, 'zoomStart+=0.05')
+        .set(loader, { display: 'none' })
+        .call(cleanupLoaderState);
+      return;
+    }
+
     const loaderTl = gsap.timeline();
+
     loaderTl
-      .delay(0.1)
-      .to(loaderMoon, { y: -150, scale: 2.5, opacity: 0, duration: 0.2, ease: 'power2.in' }, 'zoomStart')
-      .to('.loader-wolf-svg', { scale: 150, duration: 0.3, ease: 'power4.in' }, 'zoomStart')
-      .to('.loader-text-container', { opacity: 0, y: 40, duration: 0.2, ease: 'power2.in' }, 'zoomStart')
-      .to(loader, { opacity: 0, duration: 0.3, ease: 'power2.inOut' }, 'zoomStart')
-      .call(() => { triggerHeroEntrance(); }, null, 'zoomStart+=0.05')
-      .set(loader, { display: 'none' });
-    return;
+      // 1. Lua cai do céu
+      .to(loaderMoon, { y: 0, opacity: 1, scale: 1, duration: 1.4, ease: 'power4.out' })
+      // 2. Lua vira âmbar com luar (agora beige premium #ffefb3)
+      .to(loaderMoon, {
+        color: COLORS.warmLinen,
+        filter: `drop-shadow(0 0 20px ${COLORS.warmLinenOpaque95})`,
+        duration: 1.2,
+        ease: 'power2.out'
+      }, '-=0.6')
+      // 3. Lobo se preenche de baixo para cima
+      .to(loaderWolfFill, {
+        clipPath: 'inset(0% 0% 0% 0%)',
+        duration: 2.2,
+        ease: 'power3.inOut'
+      }, '-=0.8');
+
+    // Animate loader fireflies
+    if (loaderParticles.length > 0) {
+      loaderParticles.forEach((p, idx) => {
+        const delay = idx * 0.04;
+        // Float up during the fill stage
+        loaderTl.to(p, {
+          y: `-=${gsap.utils.random(300, 550)}`,
+          x: `+=${gsap.utils.random(-80, 80)}`,
+          opacity: gsap.utils.random(0.4, 0.95),
+          duration: gsap.utils.random(1.8, 2.8),
+          ease: 'power1.out'
+        }, delay + 0.5);
+
+        // Explosive zoom out during zoomStart camera pass-through
+        loaderTl.to(p, {
+          x: (idx % 2 === 0 ? '-=' : '+=') + gsap.utils.random(150, 350),
+          y: `-=${gsap.utils.random(150, 350)}`,
+          opacity: 0,
+          scale: 0.1,
+          duration: 1.0,
+          ease: 'power2.in'
+        }, 'zoomStart');
+      });
+    }
+
+    loaderTl
+      // 4. Camera Zoom-Through (GPU-safe scale com fade sincronizado)
+      .to(loaderMoon, { y: -150, scale: 2.5, opacity: 0, duration: 1.2, ease: 'power2.in' }, 'zoomStart')
+      .to('.loader-wolf-svg', { scale: 14, opacity: 0, duration: 1.4, ease: 'power4.in' }, 'zoomStart')
+      .to('.loader-text-container', { opacity: 0, y: 40, duration: 1.0, ease: 'power2.in' }, 'zoomStart')
+      .to(loader, { opacity: 0, duration: 1.4, ease: 'power2.inOut' }, 'zoomStart')
+      .call(() => {
+        unlockScroll();
+        triggerHeroEntrance();
+      }, null, 'zoomStart+=0.4')
+      .set(loader, { display: 'none' })
+      .call(cleanupLoaderState);
+  } catch (err) {
+    console.error('Error during loader animation:', err);
+    gsap.set(loader, { display: 'none', opacity: 0 });
+    unlockScroll();
+    revealHeroImmediate();
   }
-
-  const loaderTl = gsap.timeline();
-
-  loaderTl
-    // 1. Lua cai do céu
-    .to(loaderMoon, { y: 0, opacity: 1, scale: 1, duration: 1.4, ease: 'power4.out' })
-    // 2. Lua vira âmbar com luar (agora beige premium #ffefb3)
-    .to(loaderMoon, {
-      color: COLORS.warmLinen,
-      filter: `drop-shadow(0 0 20px ${COLORS.warmLinenOpaque95})`,
-      duration: 1.2,
-      ease: 'power2.out'
-    }, '-=0.6')
-    // 3. Lobo se preenche de baixo para cima
-    .to(loaderWolfFill, {
-      clipPath: 'inset(0% 0% 0% 0%)',
-      duration: 2.2,
-      ease: 'power3.inOut'
-    }, '-=0.8');
-
-  // Animate loader fireflies
-  if (loaderParticles.length > 0) {
-    loaderParticles.forEach((p, idx) => {
-      const delay = idx * 0.04;
-      // Float up during the fill stage
-      loaderTl.to(p, {
-        y: `-=${gsap.utils.random(300, 550)}`,
-        x: `+=${gsap.utils.random(-80, 80)}`,
-        opacity: gsap.utils.random(0.4, 0.95),
-        duration: gsap.utils.random(1.8, 2.8),
-        ease: 'power1.out'
-      }, delay + 0.5);
-
-      // Explosive zoom out during zoomStart camera pass-through
-      loaderTl.to(p, {
-        x: (idx % 2 === 0 ? '-=' : '+=') + gsap.utils.random(150, 350),
-        y: `-=${gsap.utils.random(150, 350)}`,
-        opacity: 0,
-        scale: 0.1,
-        duration: 1.0,
-        ease: 'power2.in'
-      }, 'zoomStart');
-    });
-  }
-
-  loaderTl
-    // 4. Camera Zoom-Through
-    .to(loaderMoon, { y: -150, scale: 2.5, opacity: 0, duration: 1.2, ease: 'power2.in' }, 'zoomStart')
-    .to('.loader-wolf-svg', { scale: 150, duration: 1.6, ease: 'power4.in' }, 'zoomStart')
-    .to('.loader-text-container', { opacity: 0, y: 40, duration: 1.0, ease: 'power2.in' }, 'zoomStart')
-    .to(loader, { opacity: 0, duration: 1.6, ease: 'power2.inOut' }, 'zoomStart')
-    .call(() => { triggerHeroEntrance(); }, null, 'zoomStart+=0.4')
-    .set(loader, { display: 'none' });
 }
 
 function triggerHeroEntrance() {
@@ -132,7 +192,7 @@ function triggerHeroEntrance() {
     .to(heroDesc,     { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }, '-=1.2')
     .to(heroCtaGroup, { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }, '-=1.0')
     .to(navbar, { y: 0, opacity: 1, duration: 2.0, ease: 'power4.out' }, '-=1.2')
-    .call(() => { document.body.style.overflow = ''; }, null, '+=0'); // Libera o scroll após a hero
+    .call(() => { document.body.style.overflow = ''; }, null, '+=0'); // Garante scroll livre após a hero
 }
 
 export function initHeroParallax() {

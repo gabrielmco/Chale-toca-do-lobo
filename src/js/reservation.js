@@ -83,7 +83,7 @@ export function initReservationReveal() {
       scrollTrigger: {
         trigger: section,
         start: 'top 95%',
-        once: true,
+        toggleActions: 'play none none none',
         invalidateOnRefresh: true
       },
       defaults: { ease: 'power3.out' }

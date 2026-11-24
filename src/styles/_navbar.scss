@@ -10,6 +10,7 @@
   width: 100%;
   padding: 1.8rem 0;
   z-index: $z-navbar;
+  isolation: isolate;
   transition: padding 0.4s $ease-buttery, background-color 0.4s ease, border-bottom 0.4s ease;
   border-bottom: 1px solid rgba($warm-linen, 0.05);
   will-change: transform;
@@ -266,6 +267,7 @@
 
   &.active {
     pointer-events: auto;
+    transform: translateZ(0);
   }
 
   @media (max-width: 1024px) {
