@@ -81,13 +81,20 @@ test('index.html hardens SVG sprite, CSS loading, video preload, drawer imgs, an
   assert.doesNotMatch(html, /media="print"\s+onload="this\.media='all'"[^>]*main\.scss|main\.scss[^>]*media="print"/);
   assert.match(html, /<link\s+rel="stylesheet"\s+href="\/src\/styles\/main\.scss"\s*\/>/);
   assert.doesNotMatch(html, /<video[^>]+preload="auto"/i);
+  assert.match(html, /<video[^>]+poster="\/imgs-videos\/video_14_poster\.webp"/i);
+  assert.match(html, /<video[^>]+poster="\/imgs-videos\/video_6_poster\.webp"/i);
+  assert.match(html, /<video[^>]+poster="\/imgs-videos\/video_7_poster\.webp"/i);
   assert.doesNotMatch(html, /<img[^>]+src=""/i);
   assert.doesNotMatch(html, /wolfFillAnimation|moonDropAnimation|moonGlowAnimation/);
-  assert.doesNotMatch(html, /google\.com\/maps\/embed\?pb=/);
-  assert.match(html, /openstreetmap\.org\/export\/embed\.html/);
+  assert.match(html, /https:\/\/www\.google\.com\/maps\/embed\?pb=/);
+  assert.match(html, /rel="canonical"\s+href="https:\/\/www\.tocadoloboibitipoca\.com\.br\/"/);
+  assert.match(html, /og-toca-do-lobo\.jpg/);
+  assert.match(html, /apple-touch-icon\.png/);
+  assert.match(html, /media="\(max-width:\s*768px\)"/);
+  assert.match(html, /media="\(min-width:\s*769px\)"/);
 });
 
-test('hero.js and SCSS prevent GPU/scroll-lock hazards and layout overflows', () => {
+test('hero.js, perf, a11y, vercel.json and WhatsApp message hardening', () => {
   const heroJs = readText('src/js/hero.js');
   assert.doesNotMatch(heroJs, /scale:\s*150\b/);
   assert.match(heroJs, /prefers-reduced-motion:\s*reduce/);
@@ -101,14 +108,31 @@ test('hero.js and SCSS prevent GPU/scroll-lock hazards and layout overflows', ()
 
   const mapScss = readText('src/styles/_map.scss');
   assert.match(mapScss, /body\.mobile-menu-open\s+\.location-map-frame\s+iframe\s*\{[^}]*display:\s*none/s);
-  assert.doesNotMatch(mapScss, /mix-blend-mode:\s*multiply/);
-  assert.doesNotMatch(mapScss, /\.location-map-frame(?:\.is-active)?\s+iframe\s*\{[^}]*\bfilter:/s);
 
   const baseScss = readText('src/styles/_base.scss');
   assert.match(baseScss, /overflow-x:\s*clip/);
 
   const expJs = readText('src/js/experiencias.js');
   assert.doesNotMatch(expJs, /^\s*import\s+Lenis\s+from\s+["']lenis["']/m);
+  assert.doesNotMatch(expJs, /removeAttribute\(["']aria-label["']\)/);
+
+  const fbJs = readText('src/js/feedback.js');
+  assert.doesNotMatch(fbJs, /removeAttribute\(['"]aria-label['"]\)/);
+  assert.match(fbJs, /IntersectionObserver/);
+  assert.match(fbJs, /quickSetter/);
+
+  const resJs = readText('src/js/reservation.js');
+  assert.doesNotMatch(resJs, /removeAttribute\(['"]aria-label['"]\)/);
+  assert.match(resJs, /Vim pelo site/i);
+
+  const mqJs = readText('src/js/scrollMarquee.js');
+  assert.match(mqJs, /IntersectionObserver/);
+
+  const ftJs = readText('src/js/footer.js');
+  assert.match(ftJs, /IntersectionObserver/);
+
+  const vercelJson = JSON.parse(readText('vercel.json'));
+  assert.ok(Array.isArray(vercelJson.headers) && vercelJson.headers.length >= 2, 'vercel.json headers missing');
 
   for (const jsFile of ['src/js/chale.js', 'src/js/experiencias.js', 'src/js/reservation.js', 'src/js/videoTriptych.js']) {
     const content = readText(jsFile);

@@ -4,4 +4,4 @@ Disallow: /*?*
 Disallow: /admin
 Disallow: /api
 
-Sitemap: https://tocadoloboibitipoca.com.br/sitemap.xml
+Sitemap: https://www.tocadoloboibitipoca.com.br/sitemap.xml

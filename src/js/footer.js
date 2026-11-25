@@ -28,9 +28,10 @@ export function initFooter() {
 
   // 1. Static Wolf Silhouette Mask is set directly in CSS (_reservation.scss)
 
-  // 2. Generate Firefly Particles
+  // 2. Generate Firefly Particles (only active while footer is near viewport)
   const numParticles = isResponsiveLayout ? 12 : 20;
   const particles = [];
+  const particleState = { active: false, timers: [], timelines: [] };
   if (particlesContainer) {
     particlesContainer.innerHTML = '';
     for (let i = 0; i < numParticles; i++) {
@@ -47,9 +48,39 @@ export function initFooter() {
       });
       particlesContainer.appendChild(p);
       particles.push(p);
+    }
 
-      // Start perpetual infinite drift animation immediately
-      animateParticleDrift(p);
+    const startParticles = () => {
+      if (particleState.active || prefersReducedMotion) return;
+      particleState.active = true;
+      particles.forEach((p) => animateParticleDrift(p, particleState));
+    };
+
+    const stopParticles = () => {
+      if (!particleState.active) return;
+      particleState.active = false;
+      particleState.timers.forEach((t) => t && t.kill());
+      particleState.timelines.forEach((tl) => tl && tl.kill());
+      particleState.timers = [];
+      particleState.timelines = [];
+      gsap.set(particles, { opacity: 0 });
+    };
+
+    if (!prefersReducedMotion) {
+      if ('IntersectionObserver' in window) {
+        const footerObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              startParticles();
+            } else {
+              stopParticles();
+            }
+          });
+        }, { rootMargin: '250px 0px' });
+        footerObserver.observe(footer);
+      } else {
+        startParticles();
+      }
     }
   }
 
@@ -190,9 +221,10 @@ export function initFooter() {
   });
 }
 
-// Standalone infinite drifting firefly animation
-function animateParticleDrift(p) {
+// Standalone infinite drifting firefly animation (paused automatically off-screen)
+function animateParticleDrift(p, state) {
   const resetAndDrift = () => {
+    if (!state.active) return;
     const startX = gsap.utils.random(50, window.innerWidth - 50);
     const startY = gsap.utils.random(220, 380);
 
@@ -205,8 +237,12 @@ function animateParticleDrift(p) {
 
     const driftDuration = gsap.utils.random(3.0, 5.0);
 
-    gsap.timeline({
-      onComplete: resetAndDrift
+    const tl = gsap.timeline({
+      onComplete: () => {
+        const idx = state.timelines.indexOf(tl);
+        if (idx !== -1) state.timelines.splice(idx, 1);
+        resetAndDrift();
+      }
     })
       .to(p, {
         opacity: gsap.utils.random(0.35, 0.9),
@@ -225,10 +261,13 @@ function animateParticleDrift(p) {
         duration: driftDuration * 0.3,
         ease: 'power1.in'
       }, driftDuration * 0.7);
+
+    state.timelines.push(tl);
   };
 
   // Stagger initial starts randomly
-  gsap.delayedCall(gsap.utils.random(0, 3.5), resetAndDrift);
+  const timer = gsap.delayedCall(gsap.utils.random(0, 2.2), resetAndDrift);
+  state.timers.push(timer);
 }
 
 

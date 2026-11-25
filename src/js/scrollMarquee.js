@@ -56,6 +56,12 @@ function initMarqueeStage(stage) {
     gsap.ticker.add(tick);
   };
 
+  const stopTicker = () => {
+    if (!isTicking) return;
+    isTicking = false;
+    gsap.ticker.remove(tick);
+  };
+
   if (smoothScroll.lenis) {
     let lastScroll = window.scrollY;
     smoothScroll.lenis.on('scroll', (event) => {
@@ -151,5 +157,19 @@ function initMarqueeStage(stage) {
   }, { passive: true });
 
   syncMetrics();
-  startTicker();
+  if ('IntersectionObserver' in window) {
+    const stageObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          syncMetrics();
+          startTicker();
+        } else {
+          stopTicker();
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+    stageObserver.observe(stage);
+  } else {
+    startTicker();
+  }
 }

@@ -57,7 +57,7 @@ export function initLoaderAndEntrance() {
   failsafeTimer = window.setTimeout(() => {
     gsap.set(loader, { display: 'none', opacity: 0 });
     unlockScroll();
-  }, 6500);
+  }, 4500);
 
   // Generate loader firefly particles
   const loaderParticlesContainer = loader.querySelector('.loader-particles-container');
@@ -111,33 +111,33 @@ export function initLoaderAndEntrance() {
 
     loaderTl
       // 1. Lua cai do céu
-      .to(loaderMoon, { y: 0, opacity: 1, scale: 1, duration: 1.4, ease: 'power4.out' })
+      .to(loaderMoon, { y: 0, opacity: 1, scale: 1, duration: 0.75, ease: 'power4.out' })
       // 2. Lua vira âmbar com luar (agora beige premium #ffefb3)
       .to(loaderMoon, {
         color: COLORS.warmLinen,
         filter: `drop-shadow(0 0 20px ${COLORS.warmLinenOpaque95})`,
-        duration: 1.2,
+        duration: 0.65,
         ease: 'power2.out'
-      }, '-=0.6')
+      }, '-=0.35')
       // 3. Lobo se preenche de baixo para cima
       .to(loaderWolfFill, {
         clipPath: 'inset(0% 0% 0% 0%)',
-        duration: 2.2,
+        duration: 1.15,
         ease: 'power3.inOut'
-      }, '-=0.8');
+      }, '-=0.45');
 
     // Animate loader fireflies
     if (loaderParticles.length > 0) {
       loaderParticles.forEach((p, idx) => {
-        const delay = idx * 0.04;
+        const delay = idx * 0.02;
         // Float up during the fill stage
         loaderTl.to(p, {
           y: `-=${gsap.utils.random(300, 550)}`,
           x: `+=${gsap.utils.random(-80, 80)}`,
           opacity: gsap.utils.random(0.4, 0.95),
-          duration: gsap.utils.random(1.8, 2.8),
+          duration: gsap.utils.random(1.0, 1.5),
           ease: 'power1.out'
-        }, delay + 0.5);
+        }, delay + 0.2);
 
         // Explosive zoom out during zoomStart camera pass-through
         loaderTl.to(p, {
@@ -145,7 +145,7 @@ export function initLoaderAndEntrance() {
           y: `-=${gsap.utils.random(150, 350)}`,
           opacity: 0,
           scale: 0.1,
-          duration: 1.0,
+          duration: 0.6,
           ease: 'power2.in'
         }, 'zoomStart');
       });
@@ -153,14 +153,14 @@ export function initLoaderAndEntrance() {
 
     loaderTl
       // 4. Camera Zoom-Through (GPU-safe scale com fade sincronizado)
-      .to(loaderMoon, { y: -150, scale: 2.5, opacity: 0, duration: 1.2, ease: 'power2.in' }, 'zoomStart')
-      .to('.loader-wolf-svg', { scale: 14, opacity: 0, duration: 1.4, ease: 'power4.in' }, 'zoomStart')
-      .to('.loader-text-container', { opacity: 0, y: 40, duration: 1.0, ease: 'power2.in' }, 'zoomStart')
-      .to(loader, { opacity: 0, duration: 1.4, ease: 'power2.inOut' }, 'zoomStart')
+      .to(loaderMoon, { y: -150, scale: 2.5, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'zoomStart')
+      .to('.loader-wolf-svg', { scale: 14, opacity: 0, duration: 0.75, ease: 'power4.in' }, 'zoomStart')
+      .to('.loader-text-container', { opacity: 0, y: 40, duration: 0.55, ease: 'power2.in' }, 'zoomStart')
+      .to(loader, { opacity: 0, duration: 0.75, ease: 'power2.inOut' }, 'zoomStart')
       .call(() => {
         unlockScroll();
         triggerHeroEntrance();
-      }, null, 'zoomStart+=0.4')
+      }, null, 'zoomStart+=0.2')
       .set(loader, { display: 'none' })
       .call(cleanupLoaderState);
   } catch (err) {

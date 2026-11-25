@@ -10,6 +10,7 @@
   padding: clamp(5.25rem, 8vh, 6.6rem) clamp(1rem, 2vw, 2rem) clamp(1rem, 2vw, 2rem);
   background: $warm-linen;
   color: $moss-black;
+  isolation: isolate;
 }
 
 .location-map-topline {
@@ -54,6 +55,9 @@
   height: 100%;
   border: 0;
   background: transparent;
+  filter: grayscale(1) contrast(1.12) brightness(1.0);
+  transform: scale(1.006);
+  transform-origin: center;
   pointer-events: none;
   transition: opacity 0.3s $ease-buttery;
 }
@@ -73,16 +77,17 @@ body.mobile-menu-open .location-map-frame iframe {
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(rgba($moss-black, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba($moss-black, 0.05) 1px, transparent 1px),
-    rgba($warm-linen, 0.24);
+    linear-gradient(rgba($moss-black, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba($moss-black, 0.03) 1px, transparent 1px),
+    $warm-linen;
   background-size: 30px 30px, 30px 30px, auto;
+  mix-blend-mode: multiply;
   pointer-events: none;
-  opacity: 0.85;
+  opacity: 0.92;
   transition: opacity 0.4s $ease-buttery;
 
   .location-map-frame.is-active & {
-    opacity: 0.12;
+    opacity: 0.22; // Let the actual map show through clearly when interacting
   }
 }
 
@@ -112,7 +117,8 @@ body.mobile-menu-open .location-map-frame iframe {
   top: 2rem;
   padding: 0.8rem 1.2rem;
   border: 1px solid rgba($warm-linen, 0.2);
-  background: rgba($moss-black, 0.95);
+  background: rgba($moss-black, 0.92);
+  backdrop-filter: blur(8px);
   color: $warm-linen;
   text-decoration: none;
   box-shadow: 
@@ -139,7 +145,8 @@ body.mobile-menu-open .location-map-frame iframe {
   min-width: min(360px, 72vw);
   padding: 1.2rem 1.5rem;
   border: 1px solid rgba($warm-linen, 0.15);
-  background: rgba($moss-black, 0.95);
+  background: rgba($moss-black, 0.92);
+  backdrop-filter: blur(8px);
   box-shadow: 
     0 20px 40px rgba($neutral-dark, 0.25),
     inset 0 1px 0 rgba($warm-linen, 0.1);
