@@ -289,7 +289,7 @@
 /* ─── Slide Card ──────────────────────────────────────────────── */
 .chale-slide {
   aspect-ratio: 1376 / 768;
-  height: clamp(220px, 37vh, 450px);
+  height: clamp(300px, 44vh, 520px); // Altura original dos cards
   width: auto;
   flex: 0 0 auto;
   overflow: hidden;

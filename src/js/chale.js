@@ -749,9 +749,9 @@ function buildChaleTimeline({ chaleSection, textBlock, subText, track }) {
       y: -30,
       autoAlpha: 0,
       stagger: 0.02,
-      duration: scrollDistance * 0.055,
+      duration: scrollDistance * 0.05,
       ease: "power2.out"
-    }, scrollDistance * 0.025);
+    }, scrollDistance * 0.015);
   }
 
   // Fade out do título e supra-título (usando o wrapper de título para isolar do reveal)
@@ -760,9 +760,9 @@ function buildChaleTimeline({ chaleSection, textBlock, subText, track }) {
     chaleTimeline.to(titleWrapper, {
       y: -50,
       autoAlpha: 0,
-      duration: scrollDistance * 0.1,
+      duration: scrollDistance * 0.085,
       ease: "power2.inOut"
-    }, scrollDistance * 0.025);
+    }, scrollDistance * 0.02);
   }
 
   const getTrackYStart = () => {
@@ -778,10 +778,9 @@ function buildChaleTimeline({ chaleSection, textBlock, subText, track }) {
     const bottomSpacing = Math.min(Math.max(rem1_2, vh2_5), rem2_5);
     
     const defaultTop = window.innerHeight - bottomSpacing - trackHeight;
-    const targetTop = headerBottom + Math.min(window.innerHeight * 0.02, 24);
+    const targetTop = headerBottom + Math.max(20, Math.min(window.innerHeight * 0.03, 32));
     const yStart = targetTop - defaultTop;
-    const maxOffset = Math.max(0, window.innerHeight * 0.36);
-    return Math.min(Math.max(0, yStart), maxOffset);
+    return yStart < 0 ? 0 : yStart;
   };
 
   // Pre-set initial y on track so there is no layout jump when entering section
@@ -793,8 +792,8 @@ function buildChaleTimeline({ chaleSection, textBlock, subText, track }) {
   }, {
     y: 0,
     ease: "power2.inOut",
-    duration: scrollDistance * 0.14
-  }, scrollDistance * 0.02);
+    duration: scrollDistance * 0.16
+  }, scrollDistance * 0.045);
 
   updateSlideParallax();
 }
